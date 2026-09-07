@@ -67,8 +67,6 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const key = document.getElementById('keyInput').value;
-    
-    // เปลี่ยนตรงนี้ให้วิ่งไปที่เส้นทาง API ตรวจสอบ Key ของเดิม
     const res = await fetch('/api/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,7 +74,7 @@
     });
     const data = await res.json();
     if(data.ok) {
-        window.location.href = '/member'; // ล็อกอินผ่านแล้วเด้งเข้าหน้าสมาชิก
+        window.location.href = '/member';
     } else {
         alert(data.message || 'Key ไม่ถูกต้องหรือหมดอายุ');
     }
