@@ -64,39 +64,57 @@
     </footer>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const key = document.getElementById('keyInput').value;
-    const res = await fetch('/api/member/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key })
-    });
-    const data = await res.json();
-    if(data.ok) {
-        window.location.reload();
-    } else {
-        alert(data.message || 'Key ไม่ถูกต้อง');
+        document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
+    if(form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const keyInput = document.getElementById('keyInput');
+            const key = keyInput ? keyInput.value.trim() : '';
+            
+            if(!key) {
+                alert('กรุณากรอก Key ก่อนครับ');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/member/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key })
+                });
+                
+                const data = await res.json();
+                if(data.ok) {
+                    window.location.href = '/member';
+                } else {
+                    alert(data.message || 'Key ไม่ถูกต้องหรือหมดอายุ');
+                }
+            } catch (err) {
+                console.p('Login error:', err);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+            }
+        });
     }
 });
 
-        function openAdminLogin() {
-            const u = prompt('Username แอดมิน:');
-            const p = prompt('Password แอดมิน:');
-            if(u && p) {
-                fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: u, password: p })
-                }).then(res => res.json()).then(data => {
-                    if(data.ok) {
-                        window.location.href = '/admin';
-                    } else {
-                        alert('ข้อมูลแอดมินไม่ถูกต้อง');
-                    }
-                });
+function openAdminLogin() {
+    const u = prompt('Username แอดมิน:');
+    const p = prompt('Password แอดมิน:');
+    if(u && p) {
+        fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: u, password: p })
+        }).then(res => res.json()).then(data => {
+            if(data.ok) {
+                window.location.href = '/admin';
+            } else {
+                alert('ข้อมูลแอดมินไม่ถูกต้อง');
             }
-        }
+        });
+    }
+}
     </script>
 </body>
 </html>
