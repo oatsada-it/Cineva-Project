@@ -67,16 +67,16 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const key = document.getElementById('keyInput').value;
-    const res = await fetch('/api/verify', {
+    const res = await fetch('/api/member/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key })
     });
     const data = await res.json();
     if(data.ok) {
-        window.location.href = '/member';
+        window.location.reload();
     } else {
-        alert(data.message || 'Key ไม่ถูกต้องหรือหมดอายุ');
+        alert(data.message || 'Key ไม่ถูกต้อง');
     }
 });
 
