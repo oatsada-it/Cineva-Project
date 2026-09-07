@@ -1,7 +1,102 @@
-<!doctype html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VIP Member</title><link rel="stylesheet" href="/style.css"></head>
-<body class="member-page"><header><div class="logo">Do<span>ซีรี่ย์</span> VIP</div><button class="buy-btn" onclick="logout()">ออกจากระบบ</button></header>
-<main class="member"><div class="member-card"><div class="icon">✓</div><div class="badge">VIP ACTIVE</div><h1>ยินดีต้อนรับสมาชิก VIP</h1><p>Key ของคุณใช้งานได้เรียบร้อย</p><div class="expiry">Key: <strong id="keyText">...</strong><br>หมดอายุ: <strong id="expires">...</strong></div>
-<div class="content-placeholder"><h2>พื้นที่สมาชิก</h2><p>ใส่รายการซีรี่ย์หรือเนื้อหาที่สมาชิกของเว็บคุณได้รับสิทธิ์เข้าถึงได้ตรงนี้</p></div></div></main>
-<script>
-async function verify(){const r=await fetch("/api/member/verify");if(!r.ok)return location.href="/";const d=await r.json();keyText.textContent=d.key;expires.textContent=new Date(d.expiresAt).toLocaleString("th-TH");} async function logout(){await fetch("/api/member/logout",{method:"POST"});location.href="/";} verify();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - Cineva MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Prompt', sans-serif; }</style>
+</head>
+<body class="bg-[#0b0f19] text-white min-h-screen flex flex-col justify-between">
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between px-8 py-5 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur-md">
+        <div class="flex items-center space-x-2">
+            <span class="text-indigo-500 text-2xl font-bold">▶</span>
+            <span class="text-xl font-bold tracking-wide">Cineva <span class="text-indigo-500">MVP</span></span>
+        </div>
+        <div>
+            <a href="/member" class="text-sm text-gray-400 hover:text-white transition">เข้าสู่ระบบ</a>
+        </div>
+    </nav>
+
+    <!-- Login Box Center -->
+    <main class="flex-1 flex items-center justify-center px-4">
+        <div class="w-full max-w-md bg-[#121824] border border-gray-800 p-8 rounded-2xl shadow-2xl relative">
+            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-indigo-600/10 rounded-full blur-xl"></div>
+            
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-800 rounded-xl text-indigo-400 mb-4 border border-gray-700">
+                    🔒
+                </div>
+                <h1 class="text-xl font-bold mb-1">กรอก KEY เพื่อเข้าใช้งาน</h1>
+                <p class="text-gray-400 text-xs">กรุณากรอก KEY ที่ได้รับจากผู้ดูแล เพื่อเข้าสู่ระบบ</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">🔑</span>
+                        <input type="text" id="keyInput" placeholder="กรอก KEY ของคุณ" required
+                            class="w-full bg-[#0b0f19] border border-gray-700 rounded-xl px-4 py-3 pl-11 text-sm focus:outline-none focus:border-indigo-500 text-white placeholder-gray-500">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition text-sm shadow-lg shadow-indigo-600/20">
+                    ยืนยัน
+                </button>
+            </form>
+
+            <div class="relative my-6 text-center">
+                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-800"></div></div>
+                <span class="relative bg-[#121824] px-3 text-xs text-gray-500 uppercase">หรือ</span>
+            </div>
+
+            <button onclick="openAdminLogin()" class="w-full bg-gray-800/60 hover:bg-gray-800 text-gray-300 font-medium py-3 rounded-xl border border-gray-700 transition text-sm flex items-center justify-center space-x-2">
+                <span>👤</span>
+                <span>เข้าสู่ระบบ (สำหรับแอดมิน)</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800/40">
+        Cineva MVP • ดูหนัง ดูซีรี่ย์ ไม่มีสะดุด
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const key = document.getElementById('keyInput').value;
+            const res = await fetch('/api/member/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key })
+            });
+            const data = await res.json();
+            if(data.ok) {
+                window.location.reload();
+            } else {
+                alert(data.message || 'Key ไม่ถูกต้อง');
+            }
+        });
+
+        function openAdminLogin() {
+            const u = prompt('Username แอดมิน:');
+            const p = prompt('Password แอดมิน:');
+            if(u && p) {
+                fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                }).then(res => res.json()).then(data => {
+                    if(data.ok) {
+                        window.location.href = '/admin';
+                    } else {
+                        alert('ข้อมูลแอดมินไม่ถูกต้อง');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
