@@ -146,6 +146,7 @@ app.get("/api/admin/stats",admin,async (req,res)=>{
 
 app.get("/admin",(req,res)=>res.sendFile(path.join(__dirname,"public/admin.html")));
 app.get("/member",(req,res)=>res.sendFile(path.join(__dirname,"public/member.html")));
+app.get("/watch",(req,res)=>res.sendFile(path.join(__dirname,"public/watch.html")));
 
 initDb().then(()=>{
   app.listen(PORT,"0.0.0.0",()=>console.log(`Doซีรี่ย์ VIP: http://localhost:${PORT}`));
