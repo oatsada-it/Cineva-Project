@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังหนัง VIP - Cineva MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Prompt', sans-serif; }</style>
+</head>
+<body class="bg-[#0b0f19] text-white min-h-screen flex flex-col justify-between">
+    <!-- Navbar -->
+    <nav class="flex items-center justify-between px-8 py-5 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <span class="text-indigo-500 text-2xl font-bold">▶</span>
+            <span class="text-xl font-bold tracking-wide">Cineva <span class="text-indigo-500">VIP Streaming</span></span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="keyDisplay" class="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-3 py-1.5 rounded-lg font-mono"></span>
+            <button onclick="logout()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-4 py-2 rounded-lg transition">
+                ออกจากระบบ
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-8">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
+            <p class="text-gray-400 text-sm">เลือกหนังหรือซีรี่ย์ที่คุณต้องการรับชมได้เลย ไม่มีโฆษณาคั่น</p>
+        </div>
+
+        <!-- Video Player Mock / Showcase -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-12 shadow-2xl">
+            <div class="aspect-video bg-black flex flex-col items-center justify-center relative group">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <div class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-3xl shadow-lg shadow-indigo-600/50 cursor-pointer hover:scale-110 transition z-10">
+                    ▶
+                </div>
+                <p class="mt-4 text-gray-300 font-medium z-10">ตัวอย่างเครื่องเล่นวิดีโอสตรีมมิ่งความคมชัดสูง (Full HD)</p>
+            </div>
+        </div>
+
+        <!-- Movie Grid -->
+        <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Squid Game SS2</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">Squid Game ซีซั่น 2</h3>
+                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / ซับไทย</p>
+                </div>
+            </div>
+            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">The Last of Us</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">The Last of Us</h3>
+                    <p class="text-xs text-gray-500 mt-1">Action / Drama</p>
+                </div>
+            </div>
+            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">One Piece Live</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">One Piece</h3>
+                    <p class="text-xs text-gray-500 mt-1">Adventure</p>
+                </div>
+            </div>
+            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Attack on Titan</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">Attack on Titan</h3>
+                    <p class="text-xs text-gray-500 mt-1">Anime / Fantasy</p>
+                </div>
+            </div>
+            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Interstellar</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">Interstellar</h3>
+                    <p class="text-xs text-gray-500 mt-1">Sci-Fi / Space</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-gray-500 border-t border-gray-800/40">
+        Cineva MVP • ดูหนัง ดูซีรี่ย์ ไม่มีสะดุด
+    </footer>
+
+    <script>
+        // ตรวจสอบความถูกต้องของสิทธิ์การเข้าชมเมื่อเปิดหน้าเว็บ
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/member/verify');
+                const data = await res.json();
+                if(!data.ok) {
+                    window.location.href = '/member'; // ถ้า Key ไม่ผ่าน ดีดกลับหน้าใส่ Key ทันที
+                } else {
+                    document.getElementById('keyDisplay').innerText = 'KEY: ' + data.key;
+                }
+            } catch (err) {
+                window.location.href = '/member';
+            }
+        }
+
+        async function logout() {
+            await fetch('/api/member/logout', { method: 'POST' });
+            window.location.href = '/member';
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>
