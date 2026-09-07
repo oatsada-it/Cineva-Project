@@ -1,76 +1,189 @@
-<!doctype html>
-<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>System Control</title><link rel="stylesheet" href="/admin.css"></head>
-<body>
-<div id="loginPage" class="login-page"><div class="login-box">
-  <div class="admin-logo">Do ซีรี่ย์</div><h1>System Control</h1><div class="sub">AUTHORIZED ONLY</div>
-  <input id="username" placeholder="Username"><input id="password" type="password" placeholder="Password">
-  <button onclick="login()">AUTHENTICATE</button><div id="loginMsg"></div>
-</div></div>
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Cineva MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Prompt', sans-serif; }</style>
+</head>
+<body class="bg-[#0b0f19] text-white min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#121824] border-r border-gray-800 flex flex-col justify-between hidden md:flex">
+        <div>
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 px-6 py-6 border-b border-gray-800">
+                <span class="text-indigo-500 text-2xl font-bold">▶</span>
+                <span class="text-lg font-bold tracking-wide">Cineva <span class="text-indigo-500">MVP</span></span>
+            </div>
+            <!-- Menu items -->
+            <div class="px-4 py-4 space-y-1 text-sm text-gray-400">
+                <a href="/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium">
+                    <span>📊</span><span>แดชบอร์ด</span>
+                </a>
+                <a href="#create" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-800 hover:text-white transition">
+                    <span>🔑</span><span>จัดการ KEY</span>
+                </a>
+                <a href="#stats" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-800 hover:text-white transition">
+                    <span>👥</span><span>ผู้ใช้งานทั้งหมด</span>
+                </a>
+            </div>
+        </div>
+        <!-- Logout -->
+        <div class="p-4 border-t border-gray-800">
+            <button onclick="adminLogout()" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition text-sm">
+                <span>🚪</span><span>ออกจากระบบ</span>
+            </button>
+        </div>
+    </aside>
 
-<div id="app" class="app hidden">
-<header class="top"><div class="brand">Do ซีรี่ย์ <span>ADMIN</span></div><button onclick="logout()">ออกจากระบบ</button></header>
-<aside class="side">
-  <div class="side-title">CONTROL PANEL</div>
-  <a class="active">🔑 จัดการ Key</a>
-  <a onclick="loadKeys()">↻ รีเฟรช</a>
-</aside>
-<main class="main">
-  <div class="title-row"><div><h2>Key Management</h2><p>สร้าง ตรวจสอบ เพิ่มเวลา ลดเวลา เปิด/ปิด และลบ Key</p></div>
-  <button class="primary" onclick="openCreate()">+ CREATE KEY</button></div>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0">
+        <!-- Top header -->
+        <header class="flex items-center justify-between px-8 py-5 border-b border-gray-800 bg-[#0b0f19]/80 backdrop-blur-md">
+            <h1 class="text-lg font-bold">แดชบอร์ดจัดการระบบ</h1>
+            <div class="flex items-center space-x-3 text-sm text-gray-400">
+                <span>admin</span>
+                <div class="w-8 h-8 rounded-full bg-indigo-600/20 border border-indigo-500 flex items-center justify-center text-indigo-400">👤</div>
+            </div>
+        </header>
 
-  <div class="stats">
-    <div><span>KEY ทั้งหมด</span><b id="sTotal">0</b></div>
-    <div><span>ใช้งานได้</span><b id="sActive">0</b></div>
-    <div><span>หมดอายุ</span><b id="sExpired">0</b></div>
-  </div>
+        <!-- Content body -->
+        <div class="p-8 space-y-8 overflow-y-auto">
+            <!-- 4 Stats Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-[#121824] border border-gray-800 p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">KEY ทั้งหมด</p>
+                        <h3 id="statTotal" class="text-2xl font-bold">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center text-xl">🔑</div>
+                </div>
+                <div class="bg-[#121824] border border-gray-800 p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">ผู้ใช้งานวันนี้</p>
+                        <h3 class="text-2xl font-bold text-indigo-400">28</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center text-xl">👥</div>
+                </div>
+                <div class="bg-[#121824] border border-gray-800 p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">ใช้ไปแล้ว</p>
+                        <h3 id="statActive" class="text-2xl font-bold text-green-400">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-green-600/10 text-green-400 flex items-center justify-center text-xl">⏰</div>
+                </div>
+                <div class="bg-[#121824] border border-gray-800 p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 mb-1">คงเหลือ / หมดอายุ</p>
+                        <h3 id="statExpired" class="text-2xl font-bold text-red-400">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-red-600/10 text-red-400 flex items-center justify-center text-xl">🚫</div>
+                </div>
+            </div>
 
-  <div class="toolbar"><input id="search" placeholder="ค้นหา Key..." oninput="render()"><button onclick="loadKeys()">รีเฟรชข้อมูล</button></div>
-  <div class="table-wrap"><table><thead><tr><th>KEY</th><th>สร้างเมื่อ</th><th>หมดอายุ</th><th>สถานะ</th><th>การจัดการ</th></tr></thead><tbody id="rows"></tbody></table></div>
-</main>
-</div>
+            <!-- Create Key & Table Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Create Form -->
+                <div class="bg-[#121824] border border-gray-800 p-6 rounded-2xl h-fit">
+                    <h2 class="text-base font-bold mb-4">สร้าง KEY ใหม่</h2>
+                    <form id="createKeyForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">ระยะเวลาใช้งาน</label>
+                            <select id="keyDays" class="w-full bg-[#0b0f19] border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
+                                <option value="1">1 วัน</option>
+                                <option value="7">7 วัน</option>
+                                <option value="30">30 วัน</option>
+                                <option value="90">90 วัน</option>
+                                <option value="365">1 ปี</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">จำนวน</label>
+                            <input type="number" id="keyCount" value="1" min="1" max="50" class="w-full bg-[#0b0f19] border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition text-sm shadow-lg shadow-indigo-600/20">
+                            สร้าง KEY
+                        </button>
+                    </form>
+                </div>
 
-<div id="modal" class="modal hidden"><div class="modal-box"><button class="x" onclick="closeCreate()">×</button><h2>สร้าง Key ใหม่</h2><p>กำหนดอายุ Key ที่ต้องการ</p><input id="days" type="number" min="1" max="3650" value="30"><span>วัน</span><button class="primary full" onclick="createKey()">CREATE KEY</button></div></div>
+                <!-- Table Keys -->
+                <div class="lg:col-span-2 bg-[#121824] border border-gray-800 p-6 rounded-2xl">
+                    <h2 class="text-base font-bold mb-4">รายการ KEY ล่าสุด</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-gray-400 text-xs">
+                                    <th class="pb-3 font-medium">KEY</th>
+                                    <th class="pb-3 font-medium">วันหมดอายุ</th>
+                                    <th class="pb-3 font-medium">สถานะ</th>
+                                    <th class="pb-3 font-medium text-right">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="keyTableBody" class="divide-y divide-gray-800/60 text-xs">
+                                <!-- Data rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-<script>
-let data=[];
-const $=id=>document.getElementById(id);
-async function login(){
- const r=await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:$("username").value,password:$("password").value})});
- const d=await r.json(); if(!r.ok){$("loginMsg").textContent=d.message;return;}
- $("loginPage").classList.add("hidden");$("app").classList.remove("hidden");loadKeys();
-}
-async function loadKeys(){
- const r=await fetch("/api/admin/keys"); if(r.status===401){$("loginPage").classList.remove("hidden");$("app").classList.add("hidden");return;}
- data=(await r.json()).keys; render(); loadStats();
-}
-async function loadStats(){const r=await fetch("/api/admin/stats");if(!r.ok)return;const d=await r.json();$("sTotal").textContent=d.total;$("sActive").textContent=d.active;$("sExpired").textContent=d.expired;}
-function render(){
- const q=$("search").value.toLowerCase();
- const now=Date.now();
- $("rows").innerHTML=data.filter(x=>x.key.toLowerCase().includes(q)).map(x=>{
-  const expired=new Date(x.expires_at).getTime()<=now;
-  const status=!x.active?"ปิดใช้งาน":expired?"หมดอายุ":"ใช้งานได้";
-  return `<tr><td><code>${x.key}</code><button class="copy" onclick="copyKey('${x.key}')">COPY</button></td>
-  <td>${fmt(x.created_at)}</td><td>${fmt(x.expires_at)}</td>
-  <td><span class="status ${x.active&&!expired?"ok":""}">${status}</span></td>
-  <td class="actions">
-  <button onclick="checkKey(${x.id})">ตรวจสอบ</button>
-  <button onclick="changeTime(${x.id},1)">+1 วัน</button>
-  <button onclick="changeTime(${x.id},7)">+7 วัน</button>
-  <button onclick="changeTime(${x.id},-1)">-1 วัน</button>
-  <button onclick="changeTime(${x.id},-7)">-7 วัน</button>
-  <button onclick="toggle(${x.id})">${x.active?"ปิด":"เปิด"}</button>
-  <button class="danger" onclick="removeKey(${x.id})">ลบ</button></td></tr>`;
- }).join("");
-}
-function fmt(v){return new Date(v).toLocaleString("th-TH")}
-function copyKey(k){navigator.clipboard.writeText(k);alert("คัดลอก "+k+" แล้ว")}
-async function checkKey(id){const r=await fetch("/api/admin/keys/"+id);const d=await r.json();if(!r.ok)return alert(d.message);const x=d.key;alert(`KEY: ${x.key}\\nสถานะ: ${x.active?"เปิดใช้งาน":"ปิดใช้งาน"}\\nหมดอายุ: ${fmt(x.expires_at)}\\nเคยใช้งานครั้งแรก: ${x.first_used_at?fmt(x.first_used_at):"ยังไม่เคยใช้"}`)}
-async function changeTime(id,days){const action=days>0?"เพิ่ม":"ลด";if(!confirm(`${action}เวลา ${Math.abs(days)} วัน?`))return;const r=await fetch("/api/admin/keys/"+id+"/time",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({days})});const d=await r.json();if(!r.ok)return alert(d.message);loadKeys()}
-async function toggle(id){await fetch("/api/admin/keys/"+id+"/toggle",{method:"POST"});loadKeys()}
-async function removeKey(id){if(!confirm("ลบ Key นี้ถาวร?"))return;await fetch("/api/admin/keys/"+id,{method:"DELETE"});loadKeys()}
-function openCreate(){$("modal").classList.remove("hidden")}
-function closeCreate(){$("modal").classList.add("hidden")}
-async function createKey(){const r=await fetch("/api/admin/keys",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({days:Number($("days").value)})});const d=await r.json();if(!r.ok)return alert(d.message);closeCreate();await loadKeys();alert("สร้าง Key สำเร็จ:\\n\\n"+d.key+"\\n\\nหมดอายุ: "+fmt(d.expiresAt));}
-async function logout(){await fetch("/api/admin/logout",{method:"POST"});location.reload()}
-</script></body></html>
+    <script>
+        async function loadAdminData() {
+            const res = await fetch('/api/admin/keys');
+            const data = await res.json();
+            if(data.ok) {
+                document.getElementById('statTotal').innerText = data.keys.length;
+                const tbody = document.getElementById('keyTableBody');
+                tbody.innerHTML = '';
+                data.keys.forEach(k => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-3 font-mono text-indigo-400">${k.key}</td>
+                            <td class="py-3 text-gray-400">${new Date(k.expires_at).toLocaleDateString()}</td>
+                            <td class="py-3"><span class="px-2 py-1 rounded-md text-[10px] ${k.active ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}">${k.active ? 'ใช้งานได้' : 'หมดอายุ'}</span></td>
+                            <td class="py-3 text-right">
+                                <button onclick="deleteKey(${k.id})" class="text-red-400 hover:underline">ลบ</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        document.getElementById('createKeyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const days = document.getElementById('keyDays').value;
+            const res = await fetch('/api/admin/keys', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ days: Number(days) })
+            });
+            const data = await res.json();
+            if(data.ok) {
+                loadAdminData();
+                alert('สร้าง Key สำเร็จ: ' + data.key);
+            }
+        });
+
+        async function deleteKey(id) {
+            if(confirm('ต้องการลบ Key นี้ใช่ไหม?')) {
+                await fetch(`/api/admin/keys/${id}`, { method: 'DELETE' });
+                loadAdminData();
+            }
+        }
+
+        function adminLogout() {
+            fetch('/api/admin/logout', { method: 'POST' }).then(() => {
+                window.location.href = '/member';
+            });
+        }
+
+        loadAdminData();
+    </script>
+</body>
+</html>
