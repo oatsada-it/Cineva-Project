@@ -53,8 +53,10 @@ app.use(express.static(path.join(__dirname,"public")));
 const iso=()=>new Date().toISOString();
 const valid=(r)=>r && r.active===true && new Date(r.expires_at).getTime()>Date.now();
 function admin(req,res,next){
- if(req.session?.admin===true) return next();
- res.status(401).json({ok:false,message:"UNAUTHORIZED"});
+  if(req.session && req.session.admin === true) {
+    return next();
+  }
+  return res.status(401).json({ ok: false, message: "UNAUTHORIZED" });
 }
 function makeKey(){
  const p=()=>crypto.randomBytes(3).toString("hex").toUpperCase();
