@@ -45,7 +45,7 @@ app.use(cookieSession({
  keys:[SESSION_SECRET],
  httpOnly:true,
  sameSite:"lax",
- secure:process.env.NODE_ENV==="production" || process.env.RENDER==="true",
+ secure: false,
  maxAge:1000*60*60*24*7
 }));
 app.use(express.static(path.join(__dirname,"public")));
