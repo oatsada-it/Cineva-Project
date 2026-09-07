@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doซีรี่ย์ VIP</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><div class="logo">Do<span>ซีรี่ย์</span> VIP</div><button class="buy-btn" onclick="key.focus()">ซื้อคีย์</button></header>
+<section class="hero"><div class="hero-bg"></div><div class="hero-content">
+<div class="live"><i></i> 41+ PLATFORMS · LIVE NOW</div>
+<h1>ซีรี่ย์จีนทุกแอป<br><span>ในที่เดียว</span></h1>
+<p>41+ แอปดูซีรี่ย์ ซับไทย พากย์ไทย ดูได้ทุกอุปกรณ์</p>
+<div class="price">ราคาเริ่มต้น <b>฿39/เดือน</b> · ยกเลิกได้ทุกเมื่อ</div>
+<div class="stats"><div><strong>฿39</strong><small>ต่อเดือน</small></div><div><strong>100K+</strong><small>สมาชิก</small></div><div><strong>47+</strong><small>แพลตฟอร์ม</small></div></div>
+</div></section>
+<section class="login-card">
+<div class="icon">✦</div><h2>กรอกรหัสยืนยัน</h2><p>ปลดล็อกซีรี่ย์พรีเมียม 40+ แพลตฟอร์ม</p>
+<div class="input-wrap"><span>⚿</span><input id="key" placeholder="VIP-XXXXXX-XXXXXX-XXXXXX" autocomplete="off"></div>
+<button class="login-btn" onclick="login()">เข้าสู่ระบบ</button><div id="msg" class="msg"></div>
+</section>
+<section class="section"><div class="section-head"><h2>ซีรี่ย์ยอดนิยม</h2><span>อัปเดตล่าสุด</span></div>
+<div class="movies">
+<article><div class="poster p1"><b>คืนแห่งความลับ</b></div><h3>คืนแห่งความลับ</h3><small>จีน · ดราม่า</small></article>
+<article><div class="poster p2"><b>รักที่ไม่มีวันลืม</b></div><h3>รักที่ไม่มีวันลืม</h3><small>จีน · โรแมนติก</small></article>
+<article><div class="poster p3"><b>ราชามังกร</b></div><h3>ราชามังกร</h3><small>จีน · แฟนตาซี</small></article>
+<article><div class="poster p4"><b>คำสัญญาใต้แสงจันทร์</b></div><h3>คำสัญญาใต้แสงจันทร์</h3><small>จีน · ดราม่า</small></article>
+<article><div class="poster p5"><b>ชะตาแห่งรัก</b></div><h3>ชะตาแห่งรัก</h3><small>จีน · โรแมนติก</small></article>
+</div></section>
+<footer>© 2026 Doซีรี่ย์ VIP · All Rights Reserved</footer>
+<script>
+async function login(){
+ const msg=document.getElementById("msg"); msg.textContent="กำลังตรวจสอบ...";
+ try{
+  const r=await fetch("/api/member/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key:key.value})});
+  const d=await r.json(); if(!r.ok)throw new Error(d.message);
+  location.href="/member";
+ }catch(e){msg.textContent=e.message;msg.className="msg error";}
+}
+key.addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+</script></body></html>

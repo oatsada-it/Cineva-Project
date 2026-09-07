@@ -1,0 +1,7 @@
+<!doctype html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VIP Member</title><link rel="stylesheet" href="/style.css"></head>
+<body class="member-page"><header><div class="logo">Do<span>ซีรี่ย์</span> VIP</div><button class="buy-btn" onclick="logout()">ออกจากระบบ</button></header>
+<main class="member"><div class="member-card"><div class="icon">✓</div><div class="badge">VIP ACTIVE</div><h1>ยินดีต้อนรับสมาชิก VIP</h1><p>Key ของคุณใช้งานได้เรียบร้อย</p><div class="expiry">Key: <strong id="keyText">...</strong><br>หมดอายุ: <strong id="expires">...</strong></div>
+<div class="content-placeholder"><h2>พื้นที่สมาชิก</h2><p>ใส่รายการซีรี่ย์หรือเนื้อหาที่สมาชิกของเว็บคุณได้รับสิทธิ์เข้าถึงได้ตรงนี้</p></div></div></main>
+<script>
+async function verify(){const r=await fetch("/api/member/verify");if(!r.ok)return location.href="/";const d=await r.json();keyText.textContent=d.key;expires.textContent=new Date(d.expiresAt).toLocaleString("th-TH");} async function logout(){await fetch("/api/member/logout",{method:"POST"});location.href="/";} verify();
+</script></body></html>
