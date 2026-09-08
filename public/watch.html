@@ -27,13 +27,13 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-8">
         <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
-                <p class="text-gray-400 text-sm">เลือกหนังหรือค้นหาด้วย ID ที่คุณต้องการรับชมได้เลย</p>
+                <h1 id="movieTitle" class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
+                <p id="movieDesc" class="text-gray-400 text-sm">พิมพ์ค้นหาชื่อหนังที่คุณต้องการรับชมได้เลย</p>
             </div>
             
-            <!-- ช่องค้นหาด้วย ID หนัง -->
+            <!-- ช่องค้นหาด้วยชื่อหนัง -->
             <div class="flex items-center space-x-2">
-                <input type="text" id="searchInput" placeholder="กรอก ID หนัง (เช่น 1, 9713)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-64">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อหนัง (เช่น บันนี่, จ้าวสายฟ้า)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
                 <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition">ค้นหา</button>
             </div>
         </div>
@@ -41,26 +41,26 @@
         <!-- Video Player -->
         <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-12 shadow-2xl">
             <div class="aspect-video bg-black relative">
-                <video id="videoPlayer" class="w-full h-full object-contain" controls>
+                <video id="videoPlayer" class="w-full h-full object-contain" controls autoplay>
                     เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
                 </video>
             </div>
         </div>
 
-        <!-- Movie Grid -->
+        <!-- Movie Grid (รายการหนังแนะนำให้กดคลิกดูได้ทันที) -->
         <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-            <div onclick="location.href='watch.html?id=1'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="selectMovie('bunny')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Big Buck Bunny</div>
                 <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">ID: 1 - ตัวอย่าง</h3>
-                    <p class="text-xs text-gray-500 mt-1">Animation</p>
+                    <h3 class="text-sm font-bold truncate">Big Buck Bunny</h3>
+                    <p class="text-xs text-gray-500 mt-1">Animation / Comedy</p>
                 </div>
             </div>
-            <div onclick="location.href='watch.html?id=9713'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="selectMovie('lightning')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">จ้าวสายฟ้า SSS</div>
                 <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">ID: 9713 - จ้าวสายฟ้า</h3>
+                    <h3 class="text-sm font-bold truncate">จ้าวสายฟ้า SSS</h3>
                     <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
                 </div>
             </div>
@@ -95,36 +95,57 @@
 
         checkAuth();
 
-        // ฐานข้อมูลหนัง (ใส่ ID และลิงก์วิดีโอตรงนี้)
+        // ฐานข้อมูลหนัง (จับคู่ชื่อคีย์คำค้นหากับลิงก์วิดีโอ)
         const movieDatabase = {
-            "1": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            "2": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-            "9713": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            "bunny": {
+                title: "Big Buck Bunny 🐰",
+                desc: "แอนิเมชันสุดน่ารัก ความคมชัดระดับ HD",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            "จ้าวสายฟ้า": {
+                title: "จ้าวสายฟ้า SSS (ฉบับพากย์ไทย) ⚡",
+                desc: "เรื่องย่อตอนพิเศษ ระบบพลังจิตระดับ SSS สุดมันส์",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            }
         };
 
-        // ฟังก์ชันค้นหาหนังจากช่อง input
+        // ฟังก์ชันค้นหาจากช่อง input
         function searchMovie() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (movieDatabase[query]) {
-                window.location.href = `watch.html?id=${query}`;
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            let foundKey = null;
+
+            // วนหาว่าคำที่พิมพ์ตรงกับเรื่องไหนบ้าง
+            for (let key in movieDatabase) {
+                if (keyword.includes(key) || key.includes(keyword)) {
+                    foundKey = key;
+                    break;
+                }
+            }
+
+            if (foundKey) {
+                window.location.href = `watch.html?v=${foundKey}`;
             } else {
-                alert("ไม่พบ ID หนังนี้ในระบบ กรุณาลองใหม่อีกครั้ง");
+                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'bunny' หรือ 'จ้าวสายฟ้า' ดูครับ");
             }
         }
 
-        // โหลดลิงก์วิดีโอตาม ID จาก URL อัตโนมัติ
+        // ฟังก์ชันกดเลือกจากหน้าเว็บ
+        function selectMovie(key) {
+            window.location.href = `watch.html?v=${key}`;
+        }
+
+        // โหลดข้อมูลหนังอัตโนมัติจาก URL Parameter
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const movieId = urlParams.get('id');
+            const vKey = urlParams.get('v') || 'bunny'; // ค่าเริ่มต้นถ้าไม่ได้เลือกคือ bunny
             const videoPlayer = document.getElementById('videoPlayer');
 
-            if (movieId && movieDatabase[movieId]) {
-                videoPlayer.src = movieDatabase[movieId];
-                videoPlayer.load();
-                videoPlayer.play().catch(error => {
-                    console.log("Autoplay ถูกบล็อกโดยเบราว์เซอร์:", error);
-                });
-                document.getElementById('searchInput').value = movieId;
+            if (movieDatabase[vKey]) {
+                const movie = movieDatabase[vKey];
+                videoPlayer.src = movie.url;
+                document.getElementById('movieTitle').innerText = movie.title;
+                document.getElementById('movieDesc').innerText = movie.desc;
+                document.getElementById('searchInput').value = vKey === 'bunny' ? 'Big Buck Bunny' : 'จ้าวสายฟ้า';
             }
         });
     </script>
