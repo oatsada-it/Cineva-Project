@@ -1,156 +1,131 @@
-const express=require("express");
-const {Pool}=require("pg");
-const cookieSession=require("cookie-session");
-const crypto=require("crypto");
-const path=require("path");
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังหนัง VIP - Cineva MVP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-white min-h-screen">
 
-const app=express();
-const PORT=process.env.PORT||3000;
-const ADMIN_USER=process.env.ADMIN_USER||"admin";
-const ADMIN_PASSWORD=process.env.ADMIN_PASSWORD||"ChangeMe-123!";
-const SESSION_SECRET=process.env.SESSION_SECRET||"change-this-secret";
+    <!-- Navbar -->
+    <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="text-indigo-500 text-2xl font-bold">▶</span>
+            <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">VIP Streaming</span></span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button onclick="handleLogout()" class="border border-red-500/30 hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-xl transition font-medium">ออกจากระบบ</button>
+        </div>
+    </nav>
 
-const pool = process.env.DATABASE_URL
-  ? new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-      max: 5
-    })
-  : null;
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- Header Info & Search -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <div>
+                <h1 id="movieTitle" class="text-2xl font-bold text-white">กำลังโหลด...</h1>
+                <p id="movieDesc" class="text-sm text-gray-400 mt-1">กรุณารอสักครู่...</p>
+            </div>
+            
+            <div class="flex w-full md:w-auto gap-2">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่องหรือตอน (เช่น อัสนี, อัสนี2)" class="bg-gray-900 border border-gray-800 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-full md:w-64">
+                <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shrink-0">ค้นหา</button>
+            </div>
+        </div>
 
-async function initDb(){
-  if(!pool){
-    throw new Error("DATABASE_URL is required.");
-  }
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS keys(
-      id SERIAL PRIMARY KEY,
-      key TEXT UNIQUE NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL,
-      expires_at TIMESTAMPTZ NOT NULL,
-      active BOOLEAN NOT NULL DEFAULT TRUE,
-      first_used_at TIMESTAMPTZ
-    );
-  `);
-}
+        <!-- Video Player -->
+        <div class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center">
+            <video id="videoPlayer" controls autoplay class="w-full h-full object-contain">
+                <source src="" type="video/mp4">
+                เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+            </video>
+        </div>
 
-const db={
-  query:(text,params=[])=>pool.query(text,params)
-};
+        <!-- Extra details/suggestions -->
+        <div class="mt-8 bg-[#121824] border border-gray-800 rounded-2xl p-6">
+            <h3 class="text-sm font-semibold text-gray-300 mb-2">ตอนอื่นๆ และซีรีส์ทั้งหมด</h3>
+            <p class="text-xs text-gray-500">คุณสามารถพิมพ์ค้นหาตอนที่ต้องการดูได้จากช่องค้นหาด้านบน (เช่น พิมพ์คำว่า "อัสนี" เพื่อดูตอนที่ 1 หรือ "อัสนี2" เพื่อดูตอนที่ 2)</p>
+        </div>
 
-app.use(express.json());
-app.use(express.urlencoded({extended:false}));
-app.use(cookieSession({
-   name:"vip_session",
-   keys:[SESSION_SECRET],
-   httpOnly:true,
-   sameSite:"lax",
-   secure: false,
-   maxAge:1000*60*60*24*7
-}));
-app.use(express.static(path.join(__dirname,"public")));
+    </main>
 
-const iso=()=>new Date().toISOString();
-const valid=(r)=>r && r.active===true && new Date(r.expires_at).getTime()>Date.now();
+    <script>
+        // ฐานข้อมูลหนังและตอนต่างๆ
+        const movieDatabase = {
+            "อัสนี": {
+                title: "ตื่นพลังเทพอัสวิน ตอนที่ 1 ⚡",
+                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 1",
+                url: "/thunder-ep1.mp4"
+            },
+            "อัสนี2": {
+                title: "ตื่นพลังเทพอัสวิน ตอนที่ 2 ⚡",
+                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 2",
+                url: "/thunder%20ep2.mp4"
+            }
+        };
 
-function admin(req,res,next){
-  if(req.session && req.session.admin === true) {
-    return next();
-  }
-  return res.status(401).json({ ok: false, message: "UNAUTHORIZED" });
-}
+        // ตรวจสอบสถานะการล็อกอินกับเซิร์ฟเวอร์
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/member/verify');
+                const data = await res.json();
+                if (!data.ok) {
+                    window.location.href = '/member';
+                } else {
+                    loadMovie("อัสนี"); // ค่าเริ่มต้นตอนแรก
+                }
+            } catch (err) {
+                window.location.href = '/member';
+            }
+        }
 
-function makeKey(){
-   const p=()=>crypto.randomBytes(3).toString("hex").toUpperCase();
-   return `VIP-${p()}-${p()}-${p()}`;
-}
+        // โหลดข้อมูลหนังใส่ Player
+        function loadMovie(key) {
+            const movie = movieDatabase[key];
+            if (movie) {
+                document.getElementById('movieTitle').innerText = movie.title;
+                document.getElementById('movieDesc').innerText = movie.desc;
+                const player = document.getElementById('videoPlayer');
+                player.src = movie.url;
+                player.load();
+            } else {
+                alert('ไม่พบตอนที่คุณค้นหา');
+            }
+        }
 
-app.post("/api/member/login",async (req,res)=>{
-   const key=String(req.body.key||"").trim().toUpperCase();
-   const {rows:[row]}=await db.query("SELECT * FROM keys WHERE key=$1",[key]);
-   if(!row || !row.active) return res.status(401).json({ok:false,message:"Key ไม่ถูกต้องหรือถูกปิดใช้งาน"});
-   if(!valid(row)) return res.status(401).json({ok:false,message:"Key นี้หมดอายุแล้ว"});
-   await db.query("UPDATE keys SET first_used_at=COALESCE(first_used_at,$1) WHERE id=$2",[iso(),row.id]);
-   req.session.memberKey=row.key;
-   res.json({ok:true,expiresAt:row.expires_at});
-});
+        // ค้นหาหนัง
+        function searchMovie() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            let foundKey = null;
 
-app.get("/api/member/verify",async (req,res)=>{
-   const key=req.session?.memberKey;
-   const {rows:[row]}=key ? await db.query("SELECT * FROM keys WHERE key=$1",[key]) : {rows:[]};
-   if(!valid(row)){
-     req.session.memberKey=null;
-     return res.status(401).json({ok:false});
-   }
-   res.json({ok:true,key:row.key,expiresAt:row.expires_at});
-});
+            for (let key in movieDatabase) {
+                if (key.toLowerCase().includes(keyword) || movieDatabase[key].title.toLowerCase().includes(keyword)) {
+                    foundKey = key;
+                    break;
+                }
+            }
 
-app.post("/api/member/logout",(req,res)=>{req.session.memberKey=null;res.json({ok:true});});
+            if (foundKey) {
+                loadMovie(foundKey);
+            } else {
+                alert('ไม่พบข้อมูลภาพยนตร์หรือตอนนี้ในระบบ');
+            }
+        }
 
-app.post("/api/admin/login",async (req,res)=>{
-   const u=String(req.body.username||""), p=String(req.body.password||"");
-   if(u!==ADMIN_USER || p!==ADMIN_PASSWORD) return res.status(401).json({ok:false,message:"Username หรือ Password ไม่ถูกต้อง"});
-   req.session.admin=true;
-   res.json({ok:true});
-});
+        // ออกจากระบบ
+        async function handleLogout() {
+            await fetch('/api/member/logout', { method: 'POST' });
+            window.location.href = '/member';
+        }
 
-app.post("/api/admin/logout",admin,(req,res)=>{req.session.admin=null;res.json({ok:true});});
-
-app.get("/api/admin/keys",admin,async (req,res)=>{
-  const {rows}=await db.query("SELECT id,key,created_at,expires_at,active,first_used_at FROM keys ORDER BY id DESC");
-  res.json({ok:true,keys:rows});
-});
-
-app.post("/api/admin/keys",admin,async (req,res)=>{
-  const days=Number(req.body.days);
-  if(!Number.isInteger(days)||days<1||days>3650) return res.status(400).json({ok:false,message:"จำนวนวันต้องอยู่ระหว่าง 1-3650"});
-  const created=new Date(), expires=new Date(created.getTime()+days*86400000), key=makeKey();
-  await db.query("INSERT INTO keys(key,created_at,expires_at,active) VALUES($1,$2,$3,TRUE)",[key,created.toISOString(),expires.toISOString()]);
-  res.json({ok:true,key,expiresAt:expires.toISOString()});
-});
-
-app.get("/api/admin/keys/:id",admin,async (req,res)=>{
-  const {rows:[row]}=await db.query("SELECT * FROM keys WHERE id=$1",[req.params.id]);
-  if(!row)return res.status(404).json({ok:false,message:"ไม่พบ Key"});
-  res.json({ok:true,key:row});
-});
-
-app.post("/api/admin/keys/:id/time",admin,async (req,res)=>{
-  const amount=Number(req.body.days);
-  if(!Number.isInteger(amount)||amount===0||Math.abs(amount)>3650) return res.status(400).json({ok:false,message:"จำนวนวันไม่ถูกต้อง"});
-  const {rows:[row]}=await db.query("SELECT * FROM keys WHERE id=$1",[req.params.id]);
-  if(!row)return res.status(404).json({ok:false,message:"ไม่พบ Key"});
-  let base=Math.max(Date.now(),new Date(row.expires_at).getTime());
-  const next=new Date(base+amount*86400000);
-  await db.query("UPDATE keys SET expires_at=$1 WHERE id=$2",[next.toISOString(),row.id]);
-  res.json({ok:true,expiresAt:next.toISOString()});
-});
-
-app.post("/api/admin/keys/:id/toggle",admin,async (req,res)=>{
-  const {rows:[row]}=await db.query("SELECT active FROM keys WHERE id=$1",[req.params.id]);
-  if(!row)return res.status(404).json({ok:false,message:"ไม่พบ Key"});
-  const active=!row.active;
-  await db.query("UPDATE keys SET active=$1 WHERE id=$2",[active,row.id]);
-  res.json({ok:true,active});
-});
-
-app.delete("/api/admin/keys/:id",admin,async (req,res)=>{
-  await db.query("DELETE FROM keys WHERE id=$1",[req.params.id]);
-  res.json({ok:true});
-});
-
-app.get("/api/admin/stats",admin,async (req,res)=>{
-  const {rows:[stats]}=await db.query(`SELECT COUNT(*)::int AS total, COUNT(*) FILTER (WHERE active=TRUE AND expires_at>$1)::int AS active, COUNT(*) FILTER (WHERE expires_at<=$1)::int AS expired FROM keys`,[iso()]);
-  res.json({ok:true,total:stats.total,active:stats.active,expired:stats.expired});
-});
-
-app.get("/admin",(req,res)=>res.sendFile(path.join(__dirname,"public/admin.html")));
-app.get("/member",(req,res)=>res.sendFile(path.join(__dirname,"public/member.html")));
-app.get("/watch",(req,res)=>res.sendFile(path.join(__dirname,"public/watch.html")));
-
-initDb().then(()=>{
-  app.listen(PORT,"0.0.0.0",()=>console.log(`Doซีรี่ย์ VIP: http://localhost:${PORT}`));
-}).catch(err=>{
-  console.error("Database initialization failed:",err);
-  process.exit(1);
-});
+        // รันตรวจสอบสิทธิ์ตอนเปิดหน้าเว็บ
+        checkAuth();
+    </script>
+</body>
+</html>
