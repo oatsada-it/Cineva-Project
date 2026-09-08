@@ -3,135 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cineva MVP - หน้าแรก</title>
+    <title>เข้าสู่ระบบสมาชิก VIP - Cineva</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Prompt', sans-serif; }
     </style>
 </head>
-<body class="bg-[#0b0f19] text-white min-h-screen">
+<body class="bg-[#0b0f19] text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Navbar -->
-    <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+    <!-- Navbar ด้านบนสุด -->
+    <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur px-6 py-4 flex justify-between items-center">
         <div class="flex items-center space-x-2">
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
-            <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">MVP</span></span>
-        </div>
-        <div class="hidden md:flex items-center space-x-6 text-sm text-gray-300">
-            <a href="#" class="text-white font-medium hover:text-indigo-400 transition">หน้าแรก</a>
-            <a href="#" class="hover:text-indigo-400 transition">วิธีใช้งาน</a>
-            <a href="#" class="hover:text-indigo-400 transition">แพ็กเกจ</a>
-            <a href="#" class="hover:text-indigo-400 transition">ติดต่อเรา</a>
-        </div>
-        <div id="authNavButton" class="flex items-center space-x-4">
-            <!-- ปุ่มจะถูกเปลี่ยนอัตโนมัติด้วย JavaScript ด้านล่าง -->
-            <a href="/member" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-4 py-2 rounded-xl transition font-medium flex items-center gap-1.5 shadow-lg shadow-indigo-600/20">
-                <span>👤</span> เข้าสู่ระบบ
-            </a>
+            <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">VIP Streaming</span></span>
         </div>
     </nav>
 
-    <!-- Main Hero Section -->
-    <main class="max-w-6xl mx-auto px-4 py-12">
-        <div class="text-center py-12 flex flex-col items-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-4">
-                Cineva <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">MVP</span>
-            </h1>
-            <p class="text-gray-400 text-sm md:text-base max-w-xl mb-8">
-                รวมซีรี่ย์ หนัง การ์ตูน อนิเมะ ครบทุกแนว ดูได้ทุกที่ ทุกเวลา ไม่มีสะดุด
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-2xl mb-8 text-xs text-gray-300">
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">⚡</span> ดูได้ไม่จำกัด (ซีรี่ย์ หนัง อนิเมะ)
-                </div>
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">🛡️</span> ระบบปลอดภัย ใช้งานได้ 100%
-                </div>
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">💻</span> รองรับทุกอุปกรณ์ (มือถือ แท็บเล็ต คอมพิวเตอร์)
-                </div>
+    <!-- กล่องกรอก Key ตรงกลาง (หน้าแรกสุด) -->
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="bg-[#121824] border border-gray-800 p-8 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-[#0b0f19] border border-gray-800 w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl">
+                <span class="text-3xl">🔑</span>
+            </div>
+            
+            <div class="text-center mt-6 mb-6">
+                <h1 class="text-xl font-bold text-white mb-1">กรอก Key VIP เพื่อเข้าชม</h1>
+                <p class="text-xs text-gray-400">ใส่รหัสผ่านที่ได้รับจากแอดมินเพื่อปลดล็อกระบบ</p>
             </div>
 
-            <div class="flex gap-4">
-                <a id="heroActionButton" href="/member" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-sm font-medium transition shadow-lg shadow-indigo-600/30">
-                    สมัครสมาชิก / กรอก Key
-                </a>
-                <a href="#popular" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 px-6 py-3 rounded-xl text-sm font-medium transition">
-                    วิธีใช้งาน
-                </a>
-            </div>
-        </div>
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-300 mb-1.5">รหัส Key VIP</label>
+                    <input type="text" id="keyInput" placeholder="VIP-XXX-XXX-XXX" required
+                        class="w-full bg-gray-900 border border-gray-800 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-indigo-500 tracking-wider text-center font-mono uppercase">
+                </div>
 
-        <!-- Popular Series Section -->
-        <div id="popular" class="mt-12">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-white">ซีรี่ย์ยอดนิยม</h2>
-                <a href="#" class="text-xs text-indigo-400 hover:underline">ดูทั้งหมด →</a>
-            </div>
+                <div id="errorMessage" class="text-red-400 text-xs text-center hidden"></div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                <!-- Poster 1 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 1</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">Squid Game</div>
-                </div>
-                <!-- Poster 2 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 2</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">The Last of Us</div>
-                </div>
-                <!-- Poster 3 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 3</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">รักนี้ไม่มีคำว่าม่</div>
-                </div>
-                <!-- Poster 4 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 4</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">One Piece</div>
-                </div>
-                <!-- Poster 5 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 5</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">จอมยุทธ์ถังฉิน</div>
-                </div>
-                <!-- Poster 6 -->
-                <div class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 6</div>
-                    <div class="p-3 text-center text-xs font-medium text-gray-200">Attack on Titan</div>
-                </div>
-            </div>
+                <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl text-sm font-medium transition shadow-lg shadow-indigo-600/30">
+                    ยืนยันรหัสเข้าสู่ระบบ
+                </button>
+            </form>
         </div>
     </main>
 
-    <script>
-        // ตรวจสอบสถานะการล็อกอินเพื่อเปลี่ยนปุ่มบนหน้าแรก
-        async function checkLoginStatus() {
-            try {
-                const res = await fetch('/api/member/verify');
-                const data = await res.json();
-                
-                const authNavButton = document.getElementById('authNavButton');
-                const heroActionButton = document.getElementById('heroActionButton');
+    <!-- Footer เล็กๆ -->
+    <footer class="text-center py-6 text-xs text-gray-600 border-t border-gray-900">
+        © Cineva MVP. All rights reserved.
+    </footer>
 
-                if (data.ok) {
-                    // ถ้าเข้าสู่ระบบ/กรอก Key แล้ว
-                    authNavButton.innerHTML = `
-                        <a href="/watch.html" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-xl transition font-medium flex items-center gap-1.5 shadow-lg shadow-emerald-600/20">
-                            <span>⚡</span> อยู่ในระบบ Key แล้ว (เข้าชม)
-                        </a>
-                    `;
-                    heroActionButton.href = "/watch.html";
-                    heroActionButton.innerText = "เข้าสู่คลังหนัง VIP ทันที";
+    <script>
+        // ส่งรหัส Key ไปเช็กกับ Server
+        async function handleLogin(event) {
+            event.preventDefault();
+            const key = document.getElementById('keyInput').value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+            const submitBtn = document.getElementById('submitBtn');
+
+            errorDiv.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'กำลังตรวจสอบ...';
+
+            try {
+                const response = await fetch('/api/member/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.ok) {
+                    // ถ้าถูกต้อง พาไปหน้าเลือกหนัง (menu.html)
+                    window.location.href = '/menu.html';
+                } else {
+                    errorDiv.innerText = data.message || 'รหัส Key ไม่ถูกต้อง หรือหมดอายุ';
+                    errorDiv.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'ยืนยันรหัสเข้าสู่ระบบ';
                 }
             } catch (err) {
-                // ยังไม่ล็อกอิน ปล่อยปุ่มเดิมไว้
+                errorDiv.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'ยืนยันรหัสเข้าสู่ระบบ';
             }
         }
 
-        checkLoginStatus();
+        // ถ้าระบบเคยล็อกอินไว้แล้ว ข้ามมาหน้าเมนูเลย
+        async function checkAlreadyLoggedIn() {
+            try {
+                const res = await fetch('/api/member/verify');
+                const data = await res.json();
+                if (data.ok) {
+                    window.location.href = '/menu.html';
+                }
+            } catch (err) {}
+        }
+
+        checkAlreadyLoggedIn();
     </script>
 </body>
 </html>
