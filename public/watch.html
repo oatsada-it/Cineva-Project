@@ -25,9 +25,17 @@
 
     <!-- Main Content -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-8">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
-            <p class="text-gray-400 text-sm">เลือกหนังหรือซีรี่ย์ที่คุณต้องการรับชมได้เลย ไม่มีโฆษณาคั่น</p>
+        <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
+                <p class="text-gray-400 text-sm">เลือกหนังหรือค้นหาด้วย ID ที่คุณต้องการรับชมได้เลย</p>
+            </div>
+            
+            <!-- ช่องค้นหาด้วย ID หนัง -->
+            <div class="flex items-center space-x-2">
+                <input type="text" id="searchInput" placeholder="กรอก ID หนัง (เช่น 1, 9713)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-64">
+                <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition">ค้นหา</button>
+            </div>
         </div>
 
         <!-- Video Player -->
@@ -43,38 +51,17 @@
         <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
             <div onclick="location.href='watch.html?id=1'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Squid Game SS2</div>
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Big Buck Bunny</div>
                 <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">Squid Game ซีซั่น 2</h3>
-                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / ซับไทย</p>
+                    <h3 class="text-sm font-bold truncate">ID: 1 - ตัวอย่าง</h3>
+                    <p class="text-xs text-gray-500 mt-1">Animation</p>
                 </div>
             </div>
-            <div onclick="location.href='watch.html?id=2'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">The Last of Us</div>
+            <div onclick="location.href='watch.html?id=9713'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">จ้าวสายฟ้า SSS</div>
                 <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">The Last of Us</h3>
-                    <p class="text-xs text-gray-500 mt-1">Action / Drama</p>
-                </div>
-            </div>
-            <div onclick="location.href='watch.html?id=3'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">One Piece Live</div>
-                <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">One Piece</h3>
-                    <p class="text-xs text-gray-500 mt-1">Adventure</p>
-                </div>
-            </div>
-            <div onclick="location.href='watch.html?id=1'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Attack on Titan</div>
-                <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">Attack on Titan</h3>
-                    <p class="text-xs text-gray-500 mt-1">Anime / Fantasy</p>
-                </div>
-            </div>
-            <div onclick="location.href='watch.html?id=2'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Interstellar</div>
-                <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">Interstellar</h3>
-                    <p class="text-xs text-gray-500 mt-1">Sci-Fi / Space</p>
+                    <h3 class="text-sm font-bold truncate">ID: 9713 - จ้าวสายฟ้า</h3>
+                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
                 </div>
             </div>
         </div>
@@ -108,17 +95,27 @@
 
         checkAuth();
 
+        // ฐานข้อมูลหนัง (ใส่ ID และลิงก์วิดีโอตรงนี้)
+        const movieDatabase = {
+            "1": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "2": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            "9713": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        };
+
+        // ฟังก์ชันค้นหาหนังจากช่อง input
+        function searchMovie() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (movieDatabase[query]) {
+                window.location.href = `watch.html?id=${query}`;
+            } else {
+                alert("ไม่พบ ID หนังนี้ในระบบ กรุณาลองใหม่อีกครั้ง");
+            }
+        }
+
         // โหลดลิงก์วิดีโอตาม ID จาก URL อัตโนมัติ
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
             const movieId = urlParams.get('id');
-
-            const movieDatabase = {
-                "1": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                "2": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-                "3": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-            };
-
             const videoPlayer = document.getElementById('videoPlayer');
 
             if (movieId && movieDatabase[movieId]) {
@@ -127,8 +124,7 @@
                 videoPlayer.play().catch(error => {
                     console.log("Autoplay ถูกบล็อกโดยเบราว์เซอร์:", error);
                 });
-            } else {
-                console.warn("ไม่พบ ID หนังในระบบ หรือไม่ได้ส่งค่า id มาใน URL");
+                document.getElementById('searchInput').value = movieId;
             }
         });
     </script>
