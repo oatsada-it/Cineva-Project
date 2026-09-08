@@ -78,18 +78,21 @@
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
                 if(!data.ok) {
-                    window.location.href = '/member.html'; 
+                    window.location.href = '/index.html'; 
                 } else {
                     document.getElementById('keyDisplay').innerText = 'KEY: ' + data.key;
                 }
             } catch (err) {
-                window.location.href = '/member.html';
+                window.location.href = '/index.html';
             }
         }
 
         async function logout() {
-            await fetch('/api/member/logout', { method: 'POST' });
-            window.location.href = '/member.html';
+            try {
+                await fetch('/api/member/logout', { method: 'POST' });
+            } catch (e) {}
+            // บังคับเด้งกลับหน้ากรอก Key หน้าแรกสุดทันที ไม่วนลูป
+            window.location.href = '/index.html';
         }
 
         checkAuth();
