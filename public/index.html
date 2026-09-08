@@ -75,7 +75,7 @@
                 const data = await response.json();
 
                 if (response.ok && data.ok) {
-                    // ถ้าถูกต้อง พาไปหน้าเลือกหนัง (menu.html)
+                    // ถ้าถูกต้อง พาไปหน้าเลือกหนัง (menu.html) ทันที
                     window.location.href = '/menu.html';
                 } else {
                     errorDiv.innerText = data.message || 'รหัส Key ไม่ถูกต้อง หรือหมดอายุ';
@@ -90,19 +90,6 @@
                 submitBtn.innerText = 'ยืนยันรหัสเข้าสู่ระบบ';
             }
         }
-
-        // ถ้าระบบเคยล็อกอินไว้แล้ว ข้ามมาหน้าเมนูเลย
-        async function checkAlreadyLoggedIn() {
-            try {
-                const res = await fetch('/api/member/verify');
-                const data = await res.json();
-                if (data.ok) {
-                    window.location.href = '/menu.html';
-                }
-            } catch (err) {}
-        }
-
-        checkAlreadyLoggedIn();
     </script>
 </body>
 </html>
