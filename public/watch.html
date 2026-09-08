@@ -78,12 +78,12 @@
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
                 if(!data.ok) {
-                    window.location.replace('/member.html'); 
+                    window.location.replace('/index.html'); 
                 } else {
                     document.getElementById('keyDisplay').innerText = 'KEY: ' + data.key;
                 }
             } catch (err) {
-                window.location.replace('/member.html');
+                window.location.replace('/index.html');
             }
         }
 
@@ -91,7 +91,7 @@
             try {
                 await fetch('/api/member/logout', { method: 'POST' });
             } catch (e) {}
-            window.location.replace('/member.html');
+            window.location.replace('/index.html');
         }
 
         checkAuth();
