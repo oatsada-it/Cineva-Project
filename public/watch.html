@@ -40,17 +40,21 @@
         </div>
 
         <!-- Video Player -->
-        <div class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center">
+        <div class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center mb-8">
             <video id="videoPlayer" controls autoplay class="w-full h-full object-contain">
                 <source src="" type="video/mp4">
                 เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
             </video>
         </div>
 
-        <!-- Extra details/suggestions -->
-        <div class="mt-8 bg-[#121824] border border-gray-800 rounded-2xl p-6">
-            <h3 class="text-sm font-semibold text-gray-300 mb-2">ตอนอื่นๆ และซีรีส์ทั้งหมด</h3>
-            <p class="text-xs text-gray-500">คุณสามารถพิมพ์ค้นหาตอนที่ต้องการดูได้จากช่องค้นหาด้านบน (เช่น พิมพ์คำว่า "อัสนี" เพื่อดูตอนที่ 1 หรือ "อัสนี2" เพื่อดูตอนที่ 2)</p>
+        <!-- Episode Selector Box -->
+        <div class="bg-[#121824] border border-gray-800 rounded-2xl p-6">
+            <h3 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
+                <span>⚡</span> รายการตอนทั้งหมด (คลิกเพื่อเปลี่ยนตอนได้ทันที)
+            </h3>
+            <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <!-- ปุ่มตอนจะถูกสร้างอัตโนมัติจากตรงนี้ -->
+            </div>
         </div>
 
     </main>
@@ -78,10 +82,26 @@
                 if (!data.ok) {
                     window.location.href = '/member';
                 } else {
+                    renderEpisodeList();
                     loadMovie("อัสนี"); // ค่าเริ่มต้นตอนแรก
                 }
             } catch (err) {
                 window.location.href = '/member';
+            }
+        }
+
+        // สร้างปุ่มเลือกตอนแสดงด้านล่าง
+        function renderEpisodeList() {
+            const container = document.getElementById('episodeList');
+            container.innerHTML = '';
+            
+            for (let key in movieDatabase) {
+                const movie = movieDatabase[key];
+                const btn = document.createElement('button');
+                btn.className = "text-left bg-gray-900 hover:bg-indigo-600/20 border border-gray-800 hover:border-indigo-500/50 p-3 rounded-xl transition text-xs font-medium text-gray-300 hover:text-white flex flex-col gap-1";
+                btn.innerHTML = `<span class="font-bold text-indigo-400">${key}</span> <span class="truncate w-full text-gray-400">${movie.title}</span>`;
+                btn.onclick = () => loadMovie(key);
+                container.appendChild(btn);
             }
         }
 
@@ -94,6 +114,9 @@
                 const player = document.getElementById('videoPlayer');
                 player.src = movie.url;
                 player.load();
+                
+                // เลื่อนหน้าจอขึ้นไปดูวิดีโอด้านบนเบาๆ
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 alert('ไม่พบตอนที่คุณค้นหา');
             }
