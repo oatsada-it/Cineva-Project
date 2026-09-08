@@ -144,7 +144,6 @@ app.get("/api/admin/stats",admin,async (req,res)=>{
   res.json({ok:true,total:stats.total,active:stats.active,expired:stats.expired});
 });
 
-// Routing หน้าเว็บ
 app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"public/member.html")));
 app.get("/menu",(req,res)=>res.sendFile(path.join(__dirname,"public/menu.html")));
 app.get("/watch",(req,res)=>res.sendFile(path.join(__dirname,"public/watch.html")));
@@ -153,6 +152,6 @@ app.get("/admin",(req,res)=>res.sendFile(path.join(__dirname,"public/admin.html"
 initDb().then(()=>{
   app.listen(PORT,"0.0.0.0",()=>console.log(`Server is running on port ${PORT}`));
 }).catch(err=>{
-  console.error("Database initialization failed:",err);
+  console.error("Database initialization failed:", err);
   process.exit(1);
 });
