@@ -32,7 +32,7 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่อง (เช่น อัสนี, บันนี่)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่อง (เช่น ตื่นพลังเทพอัสนี, บันนี่)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
                 <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition">ค้นหา</button>
             </div>
         </div>
@@ -49,10 +49,10 @@
         <!-- Movie Grid -->
         <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-            <div onclick="selectMovie('อัสนี')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">ตื่นพลังเทพอัสวิน</div>
+            <div onclick="selectMovie('ตื่นพลังเทพอัสนี')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">ตื่นพลังเทพอัสนี</div>
                 <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">ตื่นพลังเทพอัสวิน ตอนที่ 1</h3>
+                    <h3 class="text-sm font-bold truncate">ตื่นพลังเทพอัสนี ตอนที่ 1</h3>
                     <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
                 </div>
             </div>
@@ -97,8 +97,8 @@
         checkAuth();
 
         const movieDatabase = {
-            "อัสนี": {
-                title: "ตื่นพลังเทพอัสวิน ตอนที่ 1 ⚡",
+            "ตื่นพลังเทพอัสนี": {
+                title: "ตื่นพลังเทพอัสนี ตอนที่ 1",
                 desc: "พากย์ไทย ชัดเจนระดับ HD เต็มอิ่มบน Cineva",
                 url: "/thunder-ep1.mp4"
             },
@@ -123,7 +123,7 @@
             if (foundKey) {
                 window.location.href = `watch.html?v=${encodeURIComponent(foundKey)}`;
             } else {
-                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'อัสนี' ดูครับ");
+                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'ตื่นพลังเทพอัสนี' ดูครับ");
             }
         }
 
@@ -133,7 +133,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const vKey = urlParams.get('v') || 'อัสนี';
+            const vKey = urlParams.get('v') || 'ตื่นพลังเทพอัสนี';
             const videoPlayer = document.getElementById('videoPlayer');
 
             if (movieDatabase[vKey]) {
