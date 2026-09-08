@@ -33,7 +33,7 @@
             
             <!-- ช่องค้นหาด้วยชื่อหนัง -->
             <div class="flex items-center space-x-2">
-                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อหนัง (เช่น บันนี่, จ้าวสายฟ้า)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่อง (เช่น อัสนี, บันนี่)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
                 <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition">ค้นหา</button>
             </div>
         </div>
@@ -47,21 +47,21 @@
             </div>
         </div>
 
-        <!-- Movie Grid (รายการหนังแนะนำให้กดคลิกดูได้ทันที) -->
+        <!-- Movie Grid -->
         <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            <div onclick="selectMovie('อัสนี')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">ตื่นพลังเทพอัสวิน</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">ตื่นพลังเทพอัสวิน ตอนที่ 1</h3>
+                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
+                </div>
+            </div>
             <div onclick="selectMovie('bunny')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Big Buck Bunny</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">Big Buck Bunny</h3>
                     <p class="text-xs text-gray-500 mt-1">Animation / Comedy</p>
-                </div>
-            </div>
-            <div onclick="selectMovie('lightning')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
-                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">จ้าวสายฟ้า SSS</div>
-                <div class="p-4">
-                    <h3 class="text-sm font-bold truncate">จ้าวสายฟ้า SSS</h3>
-                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
                 </div>
             </div>
         </div>
@@ -95,17 +95,17 @@
 
         checkAuth();
 
-        // ฐานข้อมูลหนัง (จับคู่ชื่อคีย์คำค้นหากับลิงก์วิดีโอ)
+        // ฐานข้อมูลหนัง (เชื่อมโยงกับไฟล์ .mp4 ในโฟลเดอร์ /videos/ ของเราเอง)
         const movieDatabase = {
+            "อัสนี": {
+                title: "ตื่นพลังเทพอัสวิน ตอนที่ 1 ⚡",
+                desc: "พากย์ไทย ชัดเจนระดับ HD เต็มอิ่มบน Cineva",
+                url: "/videos/thunder-ep1.mp4"
+            },
             "bunny": {
                 title: "Big Buck Bunny 🐰",
                 desc: "แอนิเมชันสุดน่ารัก ความคมชัดระดับ HD",
                 url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            },
-            "จ้าวสายฟ้า": {
-                title: "จ้าวสายฟ้า SSS (ฉบับพากย์ไทย) ⚡",
-                desc: "เรื่องย่อตอนพิเศษ ระบบพลังจิตระดับ SSS สุดมันส์",
-                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
             }
         };
 
@@ -114,30 +114,29 @@
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             let foundKey = null;
 
-            // วนหาว่าคำที่พิมพ์ตรงกับเรื่องไหนบ้าง
             for (let key in movieDatabase) {
-                if (keyword.includes(key) || key.includes(keyword)) {
+                if (keyword.includes(key.toLowerCase()) || key.toLowerCase().includes(keyword)) {
                     foundKey = key;
                     break;
                 }
             }
 
             if (foundKey) {
-                window.location.href = `watch.html?v=${foundKey}`;
+                window.location.href = `watch.html?v=${encodeURIComponent(foundKey)}`;
             } else {
-                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'bunny' หรือ 'จ้าวสายฟ้า' ดูครับ");
+                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'อัสนี' หรือ 'bunny' ดูครับ");
             }
         }
 
         // ฟังก์ชันกดเลือกจากหน้าเว็บ
         function selectMovie(key) {
-            window.location.href = `watch.html?v=${key}`;
+            window.location.href = `watch.html?v=${encodeURIComponent(key)}`;
         }
 
         // โหลดข้อมูลหนังอัตโนมัติจาก URL Parameter
         document.addEventListener("DOMContentLoaded", function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const vKey = urlParams.get('v') || 'bunny'; // ค่าเริ่มต้นถ้าไม่ได้เลือกคือ bunny
+            const vKey = urlParams.get('v') || 'อัสนี'; // ค่าเริ่มต้นให้เปิดตอนอัสนีเลย
             const videoPlayer = document.getElementById('videoPlayer');
 
             if (movieDatabase[vKey]) {
@@ -145,7 +144,7 @@
                 videoPlayer.src = movie.url;
                 document.getElementById('movieTitle').innerText = movie.title;
                 document.getElementById('movieDesc').innerText = movie.desc;
-                document.getElementById('searchInput').value = vKey === 'bunny' ? 'Big Buck Bunny' : 'จ้าวสายฟ้า';
+                document.getElementById('searchInput').value = vKey;
             }
         });
     </script>
