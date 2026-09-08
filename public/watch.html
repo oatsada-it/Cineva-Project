@@ -27,28 +27,21 @@
     <!-- Main Container -->
     <main class="max-w-6xl mx-auto px-4 py-8">
         
-        <!-- Header Info & Search -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <div>
-                <h1 id="movieTitle" class="text-2xl font-bold text-white">กำลังโหลด...</h1>
-                <p id="movieDesc" class="text-sm text-gray-400 mt-1">กรุณารอสักครู่...</p>
-            </div>
-            
-            <div class="flex w-full md:w-auto gap-2">
-                <input type="text" id="searchInput" placeholder="ค้นหาตอน (เช่น ตอนที่ 1)" class="bg-gray-900 border border-gray-800 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-full md:w-64">
-                <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shrink-0">ค้นหา</button>
-            </div>
+        <!-- Header Info -->
+        <div class="mb-6">
+            <h1 id="movieTitle" class="text-2xl font-bold text-white">กำลังโหลด...</h1>
+            <p id="movieDesc" class="text-sm text-gray-400 mt-1">เลือกตอนที่ต้องการรับชมด้านล่างได้เลยครับ</p>
         </div>
 
         <!-- Video Player -->
         <div id="playerContainer" class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center mb-8">
-            <!-- ตัวเล่นวิดีโอ -->
+            <p class="text-gray-500 text-sm">กำลังโหลดเครื่องเล่น...</p>
         </div>
 
         <!-- Episode Selector Box -->
         <div class="bg-[#121824] border border-gray-800 rounded-2xl p-6">
             <h3 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
-                <span>⚡</span> รายการตอนทั้งหมด (คลิกเพื่อเปลี่ยนตอนได้ทันที)
+                <span>⚡</span> รายการตอนทั้งหมด
             </h3>
             <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 <!-- รายการตอน -->
@@ -58,16 +51,20 @@
     </main>
 
     <script>
-        // ฐานข้อมูลตอน (เพิ่มตอนต่อๆ ไปได้ที่นี่)
-        const movieDatabase = {
-            "ตอนที่ 1": { title: "ตื่นพลังเทพอัสนี ตอนที่ 1", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep1.mp4" },
-            "ตอนที่ 2": { title: "ตื่นพลังเทพอัสนี ตอนที่ 2", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep2.mp4" },
-            "ตอนที่ 3": { title: "ตื่นพลังเทพอัสนี ตอนที่ 3", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep3.mp4" },
-            "ตอนที่ 4": { title: "ตื่นพลังเทพอัสนี ตอนที่ 4", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep4.mp4" },
-            "ตอนที่ 5": { title: "ตื่นพลังเทพอัสนี ตอนที่ 5", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep5.mp4" },
-            "ตอนที่ 6": { title: "ตื่นพลังเทพอัสนี ตอนที่ 6", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep6.mp4" },
-            "ตอนที่ 7": { title: "ตื่นพลังเทพอัสนี ตอนที่ 7", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep7.mp4" },
-            "ตอนที่ 8": { title: "ตื่นพลังเทพอัสนี ตอนที่ 8", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep8.mp4" }
+        // ดึงชื่อซีรีส์จาก URL ที่ส่งมา
+        const urlParams = new URLSearchParams(window.location.search);
+        const seriesName = urlParams.get('series') || 'ซีรีส์ทั่วไป';
+
+        // ฐานข้อมูลตัวอย่างแต่ละตอนของเรื่องนั้นๆ
+        const episodes = {
+            "ตอนที่ 1": { title: `${seriesName} ตอนที่ 1`, url: "/thunder-ep1.mp4" },
+            "ตอนที่ 2": { title: `${seriesName} ตอนที่ 2`, url: "/thunder-ep2.mp4" },
+            "ตอนที่ 3": { title: `${seriesName} ตอนที่ 3`, url: "/thunder-ep3.mp4" },
+            "ตอนที่ 4": { title: `${seriesName} ตอนที่ 4`, url: "/thunder-ep4.mp4" },
+            "ตอนที่ 5": { title: `${seriesName} ตอนที่ 5`, url: "/thunder-ep5.mp4" },
+            "ตอนที่ 6": { title: `${seriesName} ตอนที่ 6`, url: "/thunder-ep6.mp4" },
+            "ตอนที่ 7": { title: `${seriesName} ตอนที่ 7`, url: "/thunder-ep7.mp4" },
+            "ตอนที่ 8": { title: `${seriesName} ตอนที่ 8`, url: "/thunder-ep8.mp4" }
         };
 
         async function checkAuth() {
@@ -77,8 +74,9 @@
                 if (!data.ok) {
                     window.location.href = '/';
                 } else {
+                    document.getElementById('movieTitle').innerText = seriesName;
                     renderEpisodeList();
-                    loadMovie("ตอนที่ 1");
+                    loadEpisode("ตอนที่ 1");
                 }
             } catch (err) {
                 window.location.href = '/';
@@ -89,48 +87,26 @@
             const container = document.getElementById('episodeList');
             container.innerHTML = '';
             
-            for (let key in movieDatabase) {
-                const movie = movieDatabase[key];
+            for (let key in episodes) {
+                const ep = episodes[key];
                 const btn = document.createElement('button');
                 btn.className = "text-left bg-gray-900 hover:bg-indigo-600/20 border border-gray-800 hover:border-indigo-500/50 p-3 rounded-xl transition text-xs font-medium text-gray-300 hover:text-white flex flex-col gap-1";
-                btn.innerHTML = `<span class="font-bold text-indigo-400">${key}</span> <span class="truncate w-full text-gray-400">${movie.title}</span>`;
-                btn.onclick = () => loadMovie(key);
+                btn.innerHTML = `<span class="font-bold text-indigo-400">${key}</span> <span class="truncate w-full text-gray-400">${ep.title}</span>`;
+                btn.onclick = () => loadEpisode(key);
                 container.appendChild(btn);
             }
         }
 
-        function loadMovie(key) {
-            const movie = movieDatabase[key];
-            if (movie) {
-                document.getElementById('movieTitle').innerText = movie.title;
-                document.getElementById('movieDesc').innerText = movie.desc;
-                
+        function loadEpisode(key) {
+            const ep = episodes[key];
+            if (ep) {
                 const container = document.getElementById('playerContainer');
                 container.innerHTML = `
-                    <video id="videoPlayer" controls autoplay class="w-full h-full object-contain">
-                        <source src="${movie.url}" type="video/mp4">
+                    <video controls autoplay class="w-full h-full object-contain">
+                        <source src="${ep.url}" type="video/mp4">
                         เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
                     </video>
                 `;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function searchMovie() {
-            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
-            let foundKey = null;
-
-            for (let key in movieDatabase) {
-                if (key.toLowerCase().includes(keyword) || movieDatabase[key].title.toLowerCase().includes(keyword)) {
-                    foundKey = key;
-                    break;
-                }
-            }
-
-            if (foundKey) {
-                loadMovie(foundKey);
-            } else {
-                alert('ไม่พบตอนดังกล่าวในระบบ');
             }
         }
 
