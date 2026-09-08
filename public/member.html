@@ -3,58 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ - Cineva MVP</title>
+    <title>คลังหนัง VIP - Cineva MVP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>body { font-family: 'Prompt', sans-serif; }</style>
 </head>
 <body class="bg-[#0b0f19] text-white min-h-screen flex flex-col justify-between">
     <!-- Navbar -->
-    <nav class="flex items-center justify-between px-8 py-5 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur-md">
+    <nav class="flex items-center justify-between px-8 py-5 border-b border-gray-800/60 bg-[#0b0f19]/80 backdrop-blur-md sticky top-0 z-50">
         <div class="flex items-center space-x-2">
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
-            <span class="text-xl font-bold tracking-wide">Cineva <span class="text-indigo-500">MVP</span></span>
+            <span class="text-xl font-bold tracking-wide">Cineva <span class="text-indigo-500">VIP Streaming</span></span>
         </div>
-        <div>
-            <a href="/member" class="text-sm text-gray-400 hover:text-white transition">เข้าสู่ระบบ</a>
+        <div class="flex items-center space-x-4">
+            <span id="keyDisplay" class="text-xs text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-3 py-1.5 rounded-lg font-mono"></span>
+            <button onclick="logout()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-4 py-2 rounded-lg transition">
+                ออกจากระบบ
+            </button>
         </div>
     </nav>
 
-    <!-- Login Box Center -->
-    <main class="flex-1 flex items-center justify-center px-4">
-        <div class="w-full max-w-md bg-[#121824] border border-gray-800 p-8 rounded-2xl shadow-2xl relative">
-            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-indigo-600/10 rounded-full blur-xl"></div>
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-8">
+        <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 id="movieTitle" class="text-2xl font-bold mb-2">ยินดีต้อนรับสู่โซน VIP 🎉</h1>
+                <p id="movieDesc" class="text-gray-400 text-sm">พิมพ์ค้นหาชื่อหนังที่คุณต้องการรับชมได้เลย</p>
+            </div>
             
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-800 rounded-xl text-indigo-400 mb-4 border border-gray-700">
-                    🔒
-                </div>
-                <h1 class="text-xl font-bold mb-1">กรอก KEY เพื่อเข้าใช้งาน</h1>
-                <p class="text-gray-400 text-xs">กรุณากรอก KEY ที่ได้รับจากผู้ดูแล เพื่อเข้าสู่ระบบ</p>
+            <!-- ช่องค้นหาด้วยชื่อหนัง -->
+            <div class="flex items-center space-x-2">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่อง (เช่น อัสนี, บันนี่)..." class="bg-gray-900 border border-gray-700 text-white px-4 py-2 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-72">
+                <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition">ค้นหา</button>
             </div>
+        </div>
 
-            <form id="loginForm" class="space-y-4">
-                <div>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">🔑</span>
-                        <input type="text" id="keyInput" placeholder="กรอก KEY ของคุณ" required
-                            class="w-full bg-[#0b0f19] border border-gray-700 rounded-xl px-4 py-3 pl-11 text-sm focus:outline-none focus:border-indigo-500 text-white placeholder-gray-500">
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition text-sm shadow-lg shadow-indigo-600/20">
-                    ยืนยัน
-                </button>
-            </form>
-
-            <div class="relative my-6 text-center">
-                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-800"></div></div>
-                <span class="relative bg-[#121824] px-3 text-xs text-gray-500 uppercase">หรือ</span>
+        <!-- Video Player -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-12 shadow-2xl">
+            <div class="aspect-video bg-black relative">
+                <video id="videoPlayer" class="w-full h-full object-contain" controls autoplay>
+                    เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+                </video>
             </div>
+        </div>
 
-            <button onclick="openAdminLogin()" class="w-full bg-gray-800/60 hover:bg-gray-800 text-gray-300 font-medium py-3 rounded-xl border border-gray-700 transition text-sm flex items-center justify-center space-x-2">
-                <span>👤</span>
-                <span>เข้าสู่ระบบ (สำหรับแอดมิน)</span>
-            </button>
+        <!-- Movie Grid -->
+        <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            <div onclick="selectMovie('อัสนี')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">ตื่นพลังเทพอัสวิน</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">ตื่นพลังเทพอัสวิน ตอนที่ 1</h3>
+                    <p class="text-xs text-gray-500 mt-1">พากย์ไทย / Action</p>
+                </div>
+            </div>
+            <div onclick="selectMovie('bunny')" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+                <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Big Buck Bunny</div>
+                <div class="p-4">
+                    <h3 class="text-sm font-bold truncate">Big Buck Bunny</h3>
+                    <p class="text-xs text-gray-500 mt-1">Animation / Comedy</p>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -63,46 +72,78 @@
         Cineva MVP • ดูหนัง ดูซีรี่ย์ ไม่มีสะดุด
     </footer>
 
+    <!-- Scripts -->
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const keyInput = document.getElementById('keyInput').value.trim();
-            if(!keyInput) return;
-
+        async function checkAuth() {
             try {
-                const res = await fetch('/api/member/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key: keyInput })
-                });
+                const res = await fetch('/api/member/verify');
                 const data = await res.json();
-                if(data.ok) {
-                    window.location.href = '/watch';
+                if(!data.ok) {
+                    window.location.href = '/member'; 
                 } else {
-                    alert(data.message || 'Key ไม่ถูกต้องหรือหมดอายุ');
+                    document.getElementById('keyDisplay').innerText = 'KEY: ' + data.key;
                 }
             } catch (err) {
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
-            }
-        });
-
-        function openAdminLogin() {
-            const u = prompt('Username แอดมิน:');
-            const p = prompt('Password แอดมิน:');
-            if(u && p) {
-                fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: u, password: p })
-                }).then(res => res.json()).then(data => {
-                    if(data.ok) {
-                        window.location.href = '/admin';
-                    } else {
-                        alert('ข้อมูลแอดมินไม่ถูกต้อง');
-                    }
-                });
+                window.location.href = '/member';
             }
         }
+
+        async function logout() {
+            await fetch('/api/member/logout', { method: 'POST' });
+            window.location.href = '/member';
+        }
+
+        checkAuth();
+
+        // ฐานข้อมูลหนัง (ชี้ไปที่ไฟล์ .mp4 ในหน้า public ตรงๆ)
+        const movieDatabase = {
+            "อัสนี": {
+                title: "ตื่นพลังเทพอัสวิน ตอนที่ 1 ⚡",
+                desc: "พากย์ไทย ชัดเจนระดับ HD เต็มอิ่มบน Cineva",
+                url: "/thunder-ep1.mp4"
+            },
+            "bunny": {
+                title: "Big Buck Bunny 🐰",
+                desc: "แอนิเมชันสุดน่ารัก ความคมชัดระดับ HD",
+                url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            }
+        };
+
+        function searchMovie() {
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+            let foundKey = null;
+
+            for (let key in movieDatabase) {
+                if (keyword.includes(key.toLowerCase()) || key.toLowerCase().includes(keyword)) {
+                    foundKey = key;
+                    break;
+                }
+            }
+
+            if (foundKey) {
+                window.location.href = `watch.html?v=${encodeURIComponent(foundKey)}`;
+            } else {
+                alert("ไม่พบภาพยนตร์ที่คุณค้นหา ลองพิมพ์คำว่า 'อัสนี' ดูครับ");
+            }
+        }
+
+        function selectMovie(key) {
+            window.location.href = `watch.html?v=${encodeURIComponent(key)}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vKey = urlParams.get('v') || 'อัสนี';
+            const videoPlayer = document.getElementById('videoPlayer');
+
+            if (movieDatabase[vKey]) {
+                const movie = movieDatabase[vKey];
+                videoPlayer.src = movie.url;
+                document.getElementById('movieTitle').innerText = movie.title;
+                document.getElementById('movieDesc').innerText = movie.desc;
+                document.getElementById('searchInput').value = vKey;
+            }
+        });
     </script>
 </body>
 </html>
