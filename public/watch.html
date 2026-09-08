@@ -3,90 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รับชมซีรีส์ - Cineva VIP</title>
+    <title>รับชมซีรีส์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Prompt', sans-serif; }
-    </style>
+    <style> body { font-family: 'Prompt', sans-serif; } </style>
 </head>
 <body class="bg-[#0b0f19] text-white min-h-screen">
-
-    <!-- Navbar -->
     <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/menu.html'">
+        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/menu'">
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
-            <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">VIP Streaming</span></span>
+            <span class="text-lg font-bold tracking-wider">VIP <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">Streaming</span></span>
         </div>
         <div class="flex items-center space-x-4">
-            <a href="/menu.html" class="text-gray-400 hover:text-white text-xs px-3 py-2 rounded-xl border border-gray-800 transition">กลับหน้าเมนู</a>
+            <a href="/menu" class="text-gray-400 hover:text-white text-xs px-3 py-2 rounded-xl border border-gray-800 transition">กลับหน้าเมนู</a>
             <button onclick="handleLogout()" class="border border-red-500/30 hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-xl transition font-medium">ออกจากระบบ</button>
         </div>
     </nav>
 
-    <!-- Main Container -->
     <main class="max-w-6xl mx-auto px-4 py-8">
-        
-        <!-- Header Info -->
         <div class="mb-6">
             <h1 id="movieTitle" class="text-2xl font-bold text-white">กำลังโหลด...</h1>
             <p id="movieDesc" class="text-sm text-gray-400 mt-1">เลือกตอนที่ต้องการรับชมด้านล่างได้เลยครับ</p>
         </div>
 
-        <!-- Video Player -->
         <div id="playerContainer" class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center mb-8">
             <p class="text-gray-500 text-sm">กำลังโหลดเครื่องเล่น...</p>
         </div>
 
-        <!-- Episode Selector Box -->
         <div class="bg-[#121824] border border-gray-800 rounded-2xl p-6">
-            <h3 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
-                <span>⚡</span> รายการตอนทั้งหมด
-            </h3>
-            <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                <!-- รายการตอน -->
-            </div>
+            <h3 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2"><span>⚡</span> รายการตอนทั้งหมด</h3>
+            <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
         </div>
-
     </main>
 
     <script>
-        // ดึงชื่อซีรีส์จาก URL ที่ส่งมา
         const urlParams = new URLSearchParams(window.location.search);
         const seriesName = urlParams.get('series') || 'ซีรีส์ทั่วไป';
 
-        // ฐานข้อมูลตัวอย่างแต่ละตอนของเรื่องนั้นๆ
         const episodes = {
             "ตอนที่ 1": { title: `${seriesName} ตอนที่ 1`, url: "/thunder-ep1.mp4" },
             "ตอนที่ 2": { title: `${seriesName} ตอนที่ 2`, url: "/thunder-ep2.mp4" },
             "ตอนที่ 3": { title: `${seriesName} ตอนที่ 3`, url: "/thunder-ep3.mp4" },
-            "ตอนที่ 4": { title: `${seriesName} ตอนที่ 4`, url: "/thunder-ep4.mp4" },
-            "ตอนที่ 5": { title: `${seriesName} ตอนที่ 5`, url: "/thunder-ep5.mp4" },
-            "ตอนที่ 6": { title: `${seriesName} ตอนที่ 6`, url: "/thunder-ep6.mp4" },
-            "ตอนที่ 7": { title: `${seriesName} ตอนที่ 7`, url: "/thunder-ep7.mp4" },
-            "ตอนที่ 8": { title: `${seriesName} ตอนที่ 8`, url: "/thunder-ep8.mp4" }
+            "ตอนที่ 4": { title: `${seriesName} ตอนที่ 4`, url: "/thunder-ep4.mp4" }
         };
 
         async function checkAuth() {
             try {
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
-                if (!data.ok) {
-                    window.location.href = '/';
-                } else {
+                if (!data.ok) { window.location.href = '/'; }
+                else {
                     document.getElementById('movieTitle').innerText = seriesName;
                     renderEpisodeList();
                     loadEpisode("ตอนที่ 1");
                 }
-            } catch (err) {
-                window.location.href = '/';
-            }
+            } catch (err) { window.location.href = '/'; }
         }
 
         function renderEpisodeList() {
             const container = document.getElementById('episodeList');
             container.innerHTML = '';
-            
             for (let key in episodes) {
                 const ep = episodes[key];
                 const btn = document.createElement('button');
@@ -100,8 +76,7 @@
         function loadEpisode(key) {
             const ep = episodes[key];
             if (ep) {
-                const container = document.getElementById('playerContainer');
-                container.innerHTML = `
+                document.getElementById('playerContainer').innerHTML = `
                     <video controls autoplay class="w-full h-full object-contain">
                         <source src="${ep.url}" type="video/mp4">
                         เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
