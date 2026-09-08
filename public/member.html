@@ -3,27 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบสมาชิก VIP - Cineva</title>
+    <title>เข้าสู่ระบบสมาชิก VIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Prompt', sans-serif; }
-    </style>
+    <style> body { font-family: 'Prompt', sans-serif; } </style>
 </head>
 <body class="bg-[#0b0f19] text-white min-h-screen flex flex-col justify-between">
-
-    <!-- Navbar ด้านบนสุด -->
     <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/'">
+        <div class="flex items-center space-x-2">
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
-            <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">VIP Streaming</span></span>
-        </div>
-        <div>
-            <a href="/" class="text-gray-400 hover:text-white text-xs px-4 py-2 rounded-xl border border-gray-800 transition">กลับหน้าแรก</a>
+            <span class="text-lg font-bold tracking-wider">VIP <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">Streaming</span></span>
         </div>
     </nav>
 
-    <!-- กล่องกรอก Key ตรงกลาง -->
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-[#121824] border border-gray-800 p-8 rounded-2xl w-full max-w-md shadow-2xl relative">
             <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-[#0b0f19] border border-gray-800 w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl">
@@ -51,13 +43,7 @@
         </div>
     </main>
 
-    <!-- Footer เล็กๆ -->
-    <footer class="text-center py-6 text-xs text-gray-600 border-t border-gray-900">
-        © Cineva MVP. All rights reserved.
-    </footer>
-
     <script>
-        // ฟังก์ชันส่งรหัส Key ไปเช็กกับ Server
         async function handleLogin(event) {
             event.preventDefault();
             const key = document.getElementById('keyInput').value.trim();
@@ -78,8 +64,7 @@
                 const data = await response.json();
 
                 if (response.ok && data.ok) {
-                    // ล็อกอินผ่าน เด้งไปหน้าดูหนังทันที
-                    window.location.href = '/watch.html';
+                    window.location.href = '/menu';
                 } else {
                     errorDiv.innerText = data.message || 'รหัส Key ไม่ถูกต้อง หรือหมดอายุ';
                     errorDiv.classList.remove('hidden');
@@ -89,22 +74,18 @@
             } catch (err) {
                 errorDiv.innerText = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์';
                 errorDiv.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'ยืนยันรหัสเข้าสู่ระบบ';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'ยืนยันรหัสเข้าสู่ระบบ';
             }
         }
 
-        // เช็กเผื่อกรณีผู้ใช้ล็อกอินอยู่แล้วแต่กดเข้ามาหน้า member ให้ดีดไปหน้าดูหนังเลย
         async function checkAlreadyLoggedIn() {
             try {
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
-                if (data.ok) {
-                    window.location.href = '/watch.html';
-                }
+                if (data.ok) { window.location.href = '/menu'; }
             } catch (err) {}
         }
-
         checkAlreadyLoggedIn();
     </script>
 </body>
