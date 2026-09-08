@@ -18,11 +18,13 @@
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
             <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">MVP</span></span>
         </div>
-        <div class="hidden md:flex items-center space-x-6 text-sm text-gray-300">
-            <a href="#" class="text-white font-medium hover:text-indigo-400 transition">หน้าแรก</a>
-            <a href="#" class="hover:text-indigo-400 transition">วิธีใช้งาน</a>
-            <a href="#" class="hover:text-indigo-400 transition">แพ็กเกจ</a>
+        
+        <!-- ช่องค้นหาหนังบน Navbar -->
+        <div class="hidden md:flex items-center gap-2">
+            <input type="text" id="searchBox" placeholder="ค้นหาซีรีส์ หรือพิมพ์ชื่อเรื่อง..." class="bg-gray-900 border border-gray-800 text-white px-4 py-1.5 rounded-xl text-xs focus:outline-none focus:border-indigo-500 w-64">
+            <button onclick="searchSeries()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-xl text-xs font-medium transition">ค้นหา</button>
         </div>
+
         <div class="flex items-center space-x-4">
             <button onclick="handleLogout()" class="border border-red-500/30 hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-xl transition font-medium">ออกจากระบบ</button>
         </div>
@@ -37,49 +39,37 @@
             <p class="text-gray-400 text-sm md:text-base max-w-xl mb-8">
                 รวมซีรี่ย์ หนัง การ์ตูน อนิเมะ ครบทุกแนว ดูได้ทุกที่ ทุกเวลา ไม่มีสะดุด
             </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-2xl mb-8 text-xs text-gray-300">
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">⚡</span> ดูได้ไม่จำกัด (ซีรี่ย์ หนัง อนิเมะ)
-                </div>
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">🛡️</span> ระบบปลอดภัย ใช้งานได้ 100%
-                </div>
-                <div class="bg-[#121824] border border-gray-800 p-3 rounded-xl flex items-center justify-center gap-2">
-                    <span class="text-indigo-400">💻</span> รองรับทุกอุปกรณ์ (มือถือ แท็บเล็ต คอมพิวเตอร์)
-                </div>
-            </div>
         </div>
 
         <!-- Popular Series Section -->
-        <div class="mt-8">
+        <div class="mt-4">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-white">ซีรี่ย์ยอดนิยม</h2>
+                <h2 class="text-lg font-bold text-white">ซีรี่ย์ยอดนิยม (คลิกเพื่อเลือกเรื่องรับชม)</h2>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                <!-- คลิกที่โปสเตอร์เพื่อไปหน้าดูหนัง (watch.html) -->
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <!-- โปสเตอร์แต่ละเรื่อง กดแล้วส่งชื่อเรื่องไปหน้า watch.html -->
+                <div onclick="selectSeries('ตื่นพลังเทพอัสนี')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 1</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">ตื่นพลังเทพอัสนี</div>
                 </div>
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <div onclick="selectSeries('The Last of Us')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 2</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">The Last of Us</div>
                 </div>
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <div onclick="selectSeries('รักนี้ไม่มีคำว่าม่')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 3</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">รักนี้ไม่มีคำว่าม่</div>
                 </div>
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <div onclick="selectSeries('One Piece')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 4</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">One Piece</div>
                 </div>
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <div onclick="selectSeries('จอมยุทธ์ถังฉิน')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 5</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">จอมยุทธ์ถังฉิน</div>
                 </div>
-                <div onclick="window.location.href='/watch.html'" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
+                <div onclick="selectSeries('Attack on Titan')" class="bg-[#121824] border border-gray-800 rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition cursor-pointer">
                     <div class="aspect-[3/4] bg-gray-900 flex items-center justify-center text-gray-600 text-xs">Poster 6</div>
                     <div class="p-3 text-center text-xs font-medium text-gray-200">Attack on Titan</div>
                 </div>
@@ -88,7 +78,6 @@
     </main>
 
     <script>
-        // ตรวจสอบสิทธิ์ ถ้ายังไม่กรอก Key ให้ดีดกลับไปหน้าแรกทันที
         async function checkAuth() {
             try {
                 const res = await fetch('/api/member/verify');
@@ -98,6 +87,18 @@
                 }
             } catch (err) {
                 window.location.href = '/';
+            }
+        }
+
+        function selectSeries(seriesName) {
+            // ส่งชื่อซีรีส์ไปยังหน้าดูหนังผ่าน URL Parameter
+            window.location.href = `/watch.html?series=${encodeURIComponent(seriesName)}`;
+        }
+
+        function searchSeries() {
+            const query = document.getElementById('searchBox').value.trim();
+            if (query) {
+                selectSeries(query);
             }
         }
 
