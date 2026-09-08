@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คลังหนัง VIP - Cineva MVP</title>
+    <title>รับชมซีรีส์ - Cineva VIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,11 +14,12 @@
 
     <!-- Navbar -->
     <nav class="border-b border-gray-800 bg-[#121824]/50 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2 cursor-pointer" onclick="window.location.href='/menu.html'">
             <span class="text-indigo-500 text-2xl font-bold">▶</span>
             <span class="text-lg font-bold tracking-wider">Cineva <span class="text-indigo-400 font-light text-xs border border-indigo-500/30 px-2 py-0.5 rounded-full bg-indigo-500/10">VIP Streaming</span></span>
         </div>
         <div class="flex items-center space-x-4">
+            <a href="/menu.html" class="text-gray-400 hover:text-white text-xs px-3 py-2 rounded-xl border border-gray-800 transition">กลับหน้าเมนู</a>
             <button onclick="handleLogout()" class="border border-red-500/30 hover:bg-red-500/10 text-red-400 text-xs px-4 py-2 rounded-xl transition font-medium">ออกจากระบบ</button>
         </div>
     </nav>
@@ -34,17 +35,14 @@
             </div>
             
             <div class="flex w-full md:w-auto gap-2">
-                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อเรื่องหรือตอน (เช่น ตื่นพลังเทพอัสนี 1)" class="bg-gray-900 border border-gray-800 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-full md:w-64">
+                <input type="text" id="searchInput" placeholder="ค้นหาตอน (เช่น ตอนที่ 1)" class="bg-gray-900 border border-gray-800 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-indigo-500 w-full md:w-64">
                 <button onclick="searchMovie()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shrink-0">ค้นหา</button>
             </div>
         </div>
 
         <!-- Video Player -->
-        <div class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center mb-8">
-            <video id="videoPlayer" controls autoplay class="w-full h-full object-contain">
-                <source src="" type="video/mp4">
-                เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
-            </video>
+        <div id="playerContainer" class="bg-black rounded-2xl overflow-hidden border border-gray-800 shadow-2xl aspect-video relative flex items-center justify-center mb-8">
+            <!-- ตัวเล่นวิดีโอ -->
         </div>
 
         <!-- Episode Selector Box -->
@@ -52,75 +50,41 @@
             <h3 class="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
                 <span>⚡</span> รายการตอนทั้งหมด (คลิกเพื่อเปลี่ยนตอนได้ทันที)
             </h3>
-            <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                <!-- ปุ่มตอนจะถูกสร้างอัตโนมัติจากโครงสร้างฐานข้อมูลด้านล่าง -->
+            <div id="episodeList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <!-- รายการตอน -->
             </div>
         </div>
 
     </main>
 
     <script>
-        // ฐานข้อมูลตอนที่ 1 ถึง 8 "ตื่นพลังเทพอัสนี"
+        // ฐานข้อมูลตอน (เพิ่มตอนต่อๆ ไปได้ที่นี่)
         const movieDatabase = {
-            "ตื่นพลังเทพอัสนี 1": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 1 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 1",
-                url: "/thunder-ep1.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 2": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 2 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 2",
-                url: "/thunder-ep2.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 3": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 3 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 3",
-                url: "/thunder-ep3.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 4": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 4 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 4",
-                url: "/thunder-ep4.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 5": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 5 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 5",
-                url: "/thunder-ep5.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 6": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 6 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 6",
-                url: "/thunder-ep6.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 7": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 7 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 7",
-                url: "/thunder-ep7.mp4"
-            },
-            "ตื่นพลังเทพอัสนี 8": {
-                title: "ตื่นพลังเทพอัสนี ตอนที่ 8 ⚡",
-                desc: "พากย์ไทย ชัดเจนระดับ HD ตอนที่ 8",
-                url: "/thunder-ep8.mp4"
-            }
+            "ตอนที่ 1": { title: "ตื่นพลังเทพอัสนี ตอนที่ 1", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep1.mp4" },
+            "ตอนที่ 2": { title: "ตื่นพลังเทพอัสนี ตอนที่ 2", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep2.mp4" },
+            "ตอนที่ 3": { title: "ตื่นพลังเทพอัสนี ตอนที่ 3", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep3.mp4" },
+            "ตอนที่ 4": { title: "ตื่นพลังเทพอัสนี ตอนที่ 4", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep4.mp4" },
+            "ตอนที่ 5": { title: "ตื่นพลังเทพอัสนี ตอนที่ 5", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep5.mp4" },
+            "ตอนที่ 6": { title: "ตื่นพลังเทพอัสนี ตอนที่ 6", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep6.mp4" },
+            "ตอนที่ 7": { title: "ตื่นพลังเทพอัสนี ตอนที่ 7", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep7.mp4" },
+            "ตอนที่ 8": { title: "ตื่นพลังเทพอัสนี ตอนที่ 8", desc: "พากย์ไทย ชัดเจนระดับ HD", type: "video", url: "/thunder-ep8.mp4" }
         };
 
-        // ตรวจสอบสถานะการล็อกอินกับเซิร์ฟเวอร์
         async function checkAuth() {
             try {
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
                 if (!data.ok) {
-                    window.location.href = '/member';
+                    window.location.href = '/';
                 } else {
                     renderEpisodeList();
-                    loadMovie("ตื่นพลังเทพอัสนี 1"); // แก้ไขให้ตรงกับคีย์แรกในระบบเรียบร้อย
+                    loadMovie("ตอนที่ 1");
                 }
             } catch (err) {
-                window.location.href = '/member';
+                window.location.href = '/';
             }
         }
 
-        // สร้างปุ่มเลือกตอนแสดงด้านล่าง
         function renderEpisodeList() {
             const container = document.getElementById('episodeList');
             container.innerHTML = '';
@@ -135,24 +99,23 @@
             }
         }
 
-        // โหลดข้อมูลหนังใส่ Player
         function loadMovie(key) {
             const movie = movieDatabase[key];
             if (movie) {
                 document.getElementById('movieTitle').innerText = movie.title;
                 document.getElementById('movieDesc').innerText = movie.desc;
-                const player = document.getElementById('videoPlayer');
-                player.src = movie.url;
-                player.load();
                 
-                // เลื่อนหน้าจอขึ้นไปดูวิดีโอด้านบนเบาๆ
+                const container = document.getElementById('playerContainer');
+                container.innerHTML = `
+                    <video id="videoPlayer" controls autoplay class="w-full h-full object-contain">
+                        <source src="${movie.url}" type="video/mp4">
+                        เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+                    </video>
+                `;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                alert('ไม่พบตอนที่คุณค้นหา');
             }
         }
 
-        // ค้นหาหนัง
         function searchMovie() {
             const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
             let foundKey = null;
@@ -167,17 +130,15 @@
             if (foundKey) {
                 loadMovie(foundKey);
             } else {
-                alert('ไม่พบข้อมูลภาพยนตร์หรือตอนนี้ในระบบ');
+                alert('ไม่พบตอนดังกล่าวในระบบ');
             }
         }
 
-        // ออกจากระบบ
         async function handleLogout() {
             await fetch('/api/member/logout', { method: 'POST' });
-            window.location.href = '/member';
+            window.location.href = '/';
         }
 
-        // รันตรวจสอบสิทธิ์ตอนเปิดหน้าเว็บ
         checkAuth();
     </script>
 </body>
