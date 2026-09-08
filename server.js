@@ -1,14 +1,14 @@
-const express=require("express");
-const {Pool}=require("pg");
-const cookieSession=require("cookie-session");
-const crypto=require("crypto");
-const path=require("path");
+const express = require("express");
+const { Pool } = require("pg");
+const cookieSession = require("cookie-session");
+const crypto = require("crypto");
+const path = require("path");
 
-const app=express();
-const PORT=process.env.PORT||3000;
-const ADMIN_USER=process.env.ADMIN_USER||"admin";
-const ADMIN_PASSWORD=process.env.ADMIN_PASSWORD||"ChangeMe-123!";
-const SESSION_SECRET=process.env.SESSION_SECRET||"change-this-secret";
+const app = express();
+const PORT = process.env.PORT || 3000;
+const ADMIN_USER = process.env.ADMIN_USER || "admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ChangeMe-123!";
+const SESSION_SECRET = process.env.SESSION_SECRET || "change-this-secret";
 
 const pool = process.env.DATABASE_URL
   ? new Pool({
@@ -144,6 +144,7 @@ app.get("/api/admin/stats",admin,async (req,res)=>{
   res.json({ok:true,total:stats.total,active:stats.active,expired:stats.expired});
 });
 
+// Routing หน้าเว็บ
 app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"public/member.html")));
 app.get("/menu",(req,res)=>res.sendFile(path.join(__dirname,"public/menu.html")));
 app.get("/watch",(req,res)=>res.sendFile(path.join(__dirname,"public/watch.html")));
@@ -152,6 +153,6 @@ app.get("/admin",(req,res)=>res.sendFile(path.join(__dirname,"public/admin.html"
 initDb().then(()=>{
   app.listen(PORT,"0.0.0.0",()=>console.log(`Server is running on port ${PORT}`));
 }).catch(err=>{
-  (console.error("Database initialization failed:",err)),
+  console.error("Database initialization failed:",err);
   process.exit(1);
 });
