@@ -30,48 +30,47 @@
             <p class="text-gray-400 text-sm">เลือกหนังหรือซีรี่ย์ที่คุณต้องการรับชมได้เลย ไม่มีโฆษณาคั่น</p>
         </div>
 
-        <!-- Video Player Mock / Showcase -->
+        <!-- Video Player -->
         <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden mb-12 shadow-2xl">
-    <div class="aspect-video bg-black relative">
-        <video class="w-full h-full object-contain" controls>
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-            เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
-        </video>
-    </div>
-</div>
+            <div class="aspect-video bg-black relative">
+                <video id="videoPlayer" class="w-full h-full object-contain" controls>
+                    เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ
+                </video>
+            </div>
+        </div>
 
         <!-- Movie Grid -->
         <h2 class="text-lg font-bold mb-6">ภาพยนตร์และซีรี่ย์ทั้งหมด</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="location.href='watch.html?id=1'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Squid Game SS2</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">Squid Game ซีซั่น 2</h3>
                     <p class="text-xs text-gray-500 mt-1">พากย์ไทย / ซับไทย</p>
                 </div>
             </div>
-            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="location.href='watch.html?id=2'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">The Last of Us</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">The Last of Us</h3>
                     <p class="text-xs text-gray-500 mt-1">Action / Drama</p>
                 </div>
             </div>
-            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="location.href='watch.html?id=3'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">One Piece Live</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">One Piece</h3>
                     <p class="text-xs text-gray-500 mt-1">Adventure</p>
                 </div>
             </div>
-            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="location.href='watch.html?id=1'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Attack on Titan</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">Attack on Titan</h3>
                     <p class="text-xs text-gray-500 mt-1">Anime / Fantasy</p>
                 </div>
             </div>
-            <div class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
+            <div onclick="location.href='watch.html?id=2'" class="bg-[#121824] border border-gray-800 rounded-xl overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition">
                 <div class="h-56 bg-gray-800 flex items-center justify-center text-gray-500 font-medium group-hover:scale-105 transition duration-300">Interstellar</div>
                 <div class="p-4">
                     <h3 class="text-sm font-bold truncate">Interstellar</h3>
@@ -86,14 +85,14 @@
         Cineva MVP • ดูหนัง ดูซีรี่ย์ ไม่มีสะดุด
     </footer>
 
+    <!-- Scripts -->
     <script>
-        // ตรวจสอบความถูกต้องของสิทธิ์การเข้าชมเมื่อเปิดหน้าเว็บ
         async function checkAuth() {
             try {
                 const res = await fetch('/api/member/verify');
                 const data = await res.json();
                 if(!data.ok) {
-                    window.location.href = '/member'; // ถ้า Key ไม่ผ่าน ดีดกลับหน้าใส่ Key ทันที
+                    window.location.href = '/member'; 
                 } else {
                     document.getElementById('keyDisplay').innerText = 'KEY: ' + data.key;
                 }
@@ -108,6 +107,30 @@
         }
 
         checkAuth();
+
+        // โหลดลิงก์วิดีโอตาม ID จาก URL อัตโนมัติ
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('id');
+
+            const movieDatabase = {
+                "1": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                "2": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                "3": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            };
+
+            const videoPlayer = document.getElementById('videoPlayer');
+
+            if (movieId && movieDatabase[movieId]) {
+                videoPlayer.src = movieDatabase[movieId];
+                videoPlayer.load();
+                videoPlayer.play().catch(error => {
+                    console.log("Autoplay ถูกบล็อกโดยเบราว์เซอร์:", error);
+                });
+            } else {
+                console.warn("ไม่พบ ID หนังในระบบ หรือไม่ได้ส่งค่า id มาใน URL");
+            }
+        });
     </script>
 </body>
 </html>
