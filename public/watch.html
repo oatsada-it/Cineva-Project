@@ -49,7 +49,7 @@
 
         <!-- Extra details/suggestions -->
         <div class="mt-8 bg-[#121824] border border-gray-800 rounded-2xl p-6">
-            <h3 class="text-sm font-semibold text-gray-300 mb-2">ตอนอื่นๆ และซีรีส์ที่ทั้งหมด</h3>
+            <h3 class="text-sm font-semibold text-gray-300 mb-2">ตอนอื่นๆ และซีรีส์ทั้งหมด</h3>
             <p class="text-xs text-gray-500">คุณสามารถพิมพ์ค้นหาตอนที่ต้องการดูได้จากช่องค้นหาด้านบน (เช่น พิมพ์คำว่า "อัสนี" เพื่อดูตอนที่ 1 หรือ "อัสนี2" เพื่อดูตอนที่ 2)</p>
         </div>
 
@@ -70,10 +70,10 @@
             }
         };
 
-        // ตรวจสอบสถานะการล็อกอิน
+        // ตรวจสอบสถานะการล็อกอินกับเซิร์ฟเวอร์
         async function checkAuth() {
             try {
-                const res = await fetch('/api/check-auth');
+                const res = await fetch('/api/member/verify');
                 const data = await res.json();
                 if (!data.ok) {
                     window.location.href = '/member';
@@ -120,7 +120,7 @@
 
         // ออกจากระบบ
         async function handleLogout() {
-            await fetch('/api/logout', { method: 'POST' });
+            await fetch('/api/member/logout', { method: 'POST' });
             window.location.href = '/member';
         }
 
